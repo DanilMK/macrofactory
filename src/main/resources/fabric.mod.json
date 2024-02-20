@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "macrofactory",
+	"version": "${version}",
+	"name": "MacroFactory",
+	"description": "Convenient client-side mod to simplify your gaming routine.",
+	"authors": [
+		"Smok419"
+	],
+	"license": "MIT",
+	"icon": "assets/macrofactory/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.smok.macrofactory.MacroFactory"
+		],
+		"modmenu": [
+			"net.smok.macrofactory.ModMenuImpl"
+		]
+	},
+	"mixins": [
+		"macrofactory.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.0",
+		"minecraft": "~1.20-1.20.5",
+		"java": ">=17",
+		"fabric-api": "*",
+        "malilib": ">=0.16.0"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
