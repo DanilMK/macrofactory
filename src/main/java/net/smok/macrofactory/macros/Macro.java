@@ -20,7 +20,7 @@ public class Macro {
 
     // Configs
     private final ConfigString name = new ConfigString("Name", "", "config.comment.macro_name");
-    private final ConfigHotkey hotkey = new ConfigHotkey("Hotkey", "", null);
+    private final ConfigHotkey hotkey = new ConfigHotkey("Hotkey", "", "config.comment.macro_hotkey");
     private final ConfigOptionList actionType = new ConfigOptionList("Type", ActionType.Command, "config.comment.type");
     private final ConfigOptionList callType = new ConfigOptionList("Call", CallType.SINGLE, "config.comment.call");
     private final ConfigInteger coolDown = new ConfigInteger("CoolDown", 0, 0, 20*60, "config.comment.cooldown");
@@ -110,6 +110,21 @@ public class Macro {
     }
     public boolean isChat() {
         return inChat.getBooleanValue();
+    }
+    @NotNull
+    public String getSelectName() {
+        if (!name.getStringValue().isEmpty()) return name.getStringValue();
+
+        switch ((ActionType)actionType.getOptionListValue()) {
+
+            case Player -> {
+                return playerAction.getOptionListValue().getDisplayName();
+            }
+            case Command -> {
+                return commandAction.getStringValue();
+            }
+        }
+        return "";
     }
 
 

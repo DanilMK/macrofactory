@@ -11,11 +11,11 @@ import net.smok.macrofactory.macros.Module;
 
 public class ModuleEntry extends GuiEntry<ModuleWrapper> {
 
-    private static final String COMMENT_ADD_MACRO = "gui.button.macro_add";
-    private static final String COMMENT_REMOVE_MODULE = "gui.button.module_remove";
-    private static final String COMMENT_CONFIGURE_MODULE = "gui.button.module_configure";
-    private static final String COMMENT_OPEN_MODULE = "gui.button.module_open";
-    private static final String COMMENT_ENABLE_MODULE = "gui.button.module_enabled";
+    private static final String BUTTON_MACRO_ADD = "gui.button.macro_add";
+    private static final String BUTTON_MODULE_REMOVE = "gui.button.module_remove";
+    private static final String BUTTON_MODULE_CONFIGURE = "gui.button.module_configure";
+    private static final String BUTTON_MODULE_OPEN = "gui.button.module_open";
+    private static final String BUTTON_MODULE_ENABLED = "gui.button.module_enabled";
 
     public ModuleEntry(int x, int y, int width, int height, int space, GuiList<?, ?> parent, ModuleWrapper entry, int listIndex, IKeybindConfigGui host) {
         super(x, y, width, height, space, parent, entry, listIndex, host);
@@ -26,11 +26,11 @@ public class ModuleEntry extends GuiEntry<ModuleWrapper> {
         Module module = ModuleWrapper.getModule(entry);
         if (module == null) return;
 
-        addGenericButton(false, MacroIcons.FOLDER_REMOVE, this::removeThisCollection, COMMENT_REMOVE_MODULE);
-        addGenericButton(false, MacroIcons.MACRO_ADD, this::addNewMacro, COMMENT_ADD_MACRO);
-        addSwitchButton(false, MacroIcons.SETTINGS, module.configure, this::openConfigure, COMMENT_CONFIGURE_MODULE);
-        addSwitchButton(false, MacroIcons.ENABLED, module.getEnabled().getBooleanValue(), this::enableOrDisable, COMMENT_ENABLE_MODULE);
-        addSwitchButton(true, MacroIcons.FOLDER, module.isOpen, this::openOrCloseFolder, COMMENT_OPEN_MODULE);
+        addGenericButton(false, MacroIcons.FOLDER_REMOVE, this::removeThisCollection, BUTTON_MODULE_REMOVE);
+        addGenericButton(false, MacroIcons.MACRO_ADD, this::addNewMacro, BUTTON_MACRO_ADD);
+        addSwitchButton(false, MacroIcons.SETTINGS, module.configure, this::openConfigure, BUTTON_MODULE_CONFIGURE);
+        addSwitchButton(false, MacroIcons.ENABLED, module.getEnabled().getBooleanValue(), this::enableOrDisable, BUTTON_MODULE_ENABLED);
+        addSwitchButton(true, MacroIcons.FOLDER, module.isOpen, this::openOrCloseFolder, BUTTON_MODULE_OPEN);
 
         //addTextField(new PositionAlignment(true), module.getNameConfig(), COMMENT_MODULE_NAME, 256);
 

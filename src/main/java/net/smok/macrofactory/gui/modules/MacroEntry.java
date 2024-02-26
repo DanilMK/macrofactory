@@ -2,21 +2,18 @@ package net.smok.macrofactory.gui.modules;
 
 import fi.dy.masa.malilib.config.IConfigValue;
 import fi.dy.masa.malilib.gui.GuiBase;
-import fi.dy.masa.malilib.gui.GuiTextFieldGeneric;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
-import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
 import net.smok.macrofactory.gui.*;
-import net.smok.macrofactory.gui.utils.SwitchComment;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.gui.utils.ListEntryBox;
 import net.smok.macrofactory.macros.actions.ActionType;
 
 public class MacroEntry extends GuiEntry<ModuleWrapper> {
 
-    private static final String COMMENT_MACRO_REMOVE = "gui.button.macro_remove";
-    private static final String COMMENT_MACRO_CONFIGURE = "gui.button.macro_configure";
-    private static final String COMMENT_CHAT = "gui.button.chat";
+    private static final String BUTTON_MACRO_REMOVE = "gui.button.macro_remove";
+    private static final String BUTTON_MACRO_CONFIGURE = "gui.button.macro_configure";
+    private static final String BUTTON_CHAT = "gui.button.chat";
 
 
 
@@ -31,9 +28,9 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
 
         if (macro == null) return;
 
-        addGenericButton(new PositionAlignment(false, MacroIcons.MACRO_REMOVE), MacroIcons.MACRO_REMOVE, this::removeMacro, COMMENT_MACRO_REMOVE);
-        addSwitchButton(new PositionAlignment(false, MacroIcons.SETTINGS), MacroIcons.SETTINGS, macro.configure, this::openConfigure, COMMENT_MACRO_CONFIGURE);
-        addKeybindButton(new PositionAlignment(false, 120), macro.getHotkey(), macro.getHotkey().getComment());
+        addGenericButton(new PositionAlignment(false, MacroIcons.MACRO_REMOVE), MacroIcons.MACRO_REMOVE, this::removeMacro, BUTTON_MACRO_REMOVE);
+        addSwitchButton(new PositionAlignment(false, MacroIcons.SETTINGS), MacroIcons.SETTINGS, macro.configure, this::openConfigure, BUTTON_MACRO_CONFIGURE);
+        addKeybindButton(new PositionAlignment(false, 120), macro.getHotkey());
 
 
         if (macro.configure) {
@@ -50,7 +47,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
         switch (actionType) {
 
             case Command -> {
-                addSwitchButton(false, MacroIcons.CHAT, macro.isChat(), this::setChat, COMMENT_CHAT);
+                addSwitchButton(false, MacroIcons.CHAT, macro.isChat(), this::setChat, BUTTON_CHAT);
                 IConfigValue config = macro.getCommandAction();
                 addTextField(new PositionAlignment(true), config, 256);
             }

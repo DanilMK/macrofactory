@@ -18,21 +18,23 @@ public class RectContainer {
         maxEmptyX = maxX;
         height = lineHeight;
     }
-    protected void addLine() {
+    public void addLine() {
         line++;
         height = (lineHeight + spaceY) * (line + 1);
         minEmptyX = minX;
         maxEmptyX = maxX;
     }
-    protected int getLineY() {
+    public int getLineY() {
         return y + (lineHeight + spaceY) * line;
     }
 
-    protected int maxWidth() {
+    public int maxWidth() {
         return maxEmptyX - minEmptyX;
     }
 
-    public Rect align(@NotNull PositionAlignment alignment) {
+
+
+    public Rect addRect(@NotNull PositionAlignment alignment) {
         int width = alignment.getSize(maxWidth());
         int x;
 
@@ -46,6 +48,11 @@ public class RectContainer {
 
 
         return new Rect(x, getLineY(), width, lineHeight);
+    }
+
+    public boolean isMouseOver(int mouseX, int mouseY) {
+        return mouseX >= this.minX && mouseX < maxX &&
+                mouseY >= this.y && mouseY < this.y + this.height;
     }
 
 

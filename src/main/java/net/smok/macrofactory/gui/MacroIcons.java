@@ -15,11 +15,11 @@ public enum MacroIcons implements IGuiIcon {
     FOLDER_REMOVE(0, 120, 20, 20),
     MACRO_ADD(0, 140, 20, 20),
     MACRO_REMOVE(0, 160, 20, 20),
-    LOOP(100, 0, 20, 20),
-    CHAT(100, 0, 20, 20);
+    MACRO_BUTTON(0, 180, 20, 20),
+    MACRO_EMPTY_ICON(100, 0, 20, 20),
+    CHAT(0, 200, 20, 20);
 
     public static final Identifier TEXTURE = new Identifier(MacroFactory.MOD_ID, "textures/icons.png");
-    public static final int BUTTON_WIDTH = 20;
 
     private final int u;
     private final int v;
@@ -71,8 +71,8 @@ public enum MacroIcons implements IGuiIcon {
 
         if (selected)
         {
-            u += this.hoverOffU;
-            v += this.hoverOffV;
+            u += this.hoverOffU * 2;
+            v += this.hoverOffV * 2;
         }
 
         RenderUtils.drawTexturedRect(x, y, u, v, this.w, this.h, zLevel);

@@ -44,7 +44,7 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
     @Override
     protected GuiList<ModuleWrapper, GuiEntry<ModuleWrapper>> createListWidget(int listX, int listY) {
         ModulesGui gui = this;
-        return new GuiList<>(listX, listY, getBrowserWidth(), getBrowserHeight(), false, 22) {
+        return new GuiList<>(listX, listY, getBrowserWidth(), getBrowserHeight(), false, 22, getBrowserWidth() - 23) {
             @Override
             public Collection<ModuleWrapper> getAllEntries() {
                 ImmutableList.Builder<ModuleWrapper> builder = ImmutableList.builder();

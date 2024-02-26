@@ -14,21 +14,21 @@ public abstract class GuiList<T, W extends GuiEntry<T>> extends WidgetListConfig
 
     protected final WidgetSearchBarConfigs widgetSearchConfigs;
 
-    public GuiList(int x, int y, int width, int height, boolean useKeybindSearch, int entryHeight) {
+    public GuiList(int x, int y, int width, int height, boolean useKeybindSearch, int entryHeight, int searchBarWidth) {
         super(x, y, width, height, 100);
         this.browserEntryHeight = entryHeight;
         this.entryHeight = entryHeight;
 
         if (useKeybindSearch)
         {
-            this.widgetSearchConfigs = new WidgetSearchBarConfigs(x + 2, y + 4, width - 14, 20, 0, MaLiLibIcons.SEARCH, LeftRight.LEFT);
+            this.widgetSearchConfigs = new WidgetSearchBarConfigs(x + 2, y + 4, searchBarWidth, 20, 0, MaLiLibIcons.SEARCH, LeftRight.LEFT);
             this.widgetSearchBar = this.widgetSearchConfigs;
             this.browserEntriesOffsetY = 23;
         }
         else
         {
             this.widgetSearchConfigs = null;
-            this.widgetSearchBar = new WidgetSearchBar(x + 2, y + 4, width - 14, 14, 0, MaLiLibIcons.SEARCH, LeftRight.LEFT);
+            this.widgetSearchBar = new WidgetSearchBar(x + 2, y + 4, searchBarWidth, 14, 0, MaLiLibIcons.SEARCH, LeftRight.LEFT);
             this.browserEntriesOffsetY = 17;
         }
     }

@@ -132,7 +132,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     // Position and space control
 
     public Rect addRect(PositionAlignment alignment) {
-        return rectContainer.align(alignment);
+        return rectContainer.addRect(alignment);
     }
 
     protected void addLine() {

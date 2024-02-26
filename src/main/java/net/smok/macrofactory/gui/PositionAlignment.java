@@ -10,12 +10,12 @@ public record PositionAlignment(boolean attachLeft, int size, int shift) {
         this.size = size;
         this.attachLeft = attachLeft;
     }
-    public PositionAlignment(boolean attachLeft, int x, @NotNull IGuiIcon icon) {
-        this(attachLeft, icon.getWidth(), x);
+    public PositionAlignment(boolean attachLeft, int shift, @NotNull IGuiIcon icon) {
+        this(attachLeft, icon.getWidth(), shift);
     }
 
-    public PositionAlignment(boolean attachLeft, int width) {
-        this(attachLeft, width, 0);
+    public PositionAlignment(boolean attachLeft, int size) {
+        this(attachLeft, size, 0);
     }
     public PositionAlignment(boolean attachLeft) {
         this(attachLeft, Integer.MAX_VALUE, 0);

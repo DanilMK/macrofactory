@@ -11,7 +11,7 @@ import fi.dy.masa.malilib.hotkeys.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.smok.macrofactory.MacroFactory;
-import net.smok.macrofactory.gui.selector.MacroSelectionScreen;
+import net.smok.macrofactory.gui.selector.MacroSelectionGui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class Module implements IKeybindProvider {
     private final ConfigString name = new ConfigString("Name", "module.default.new", "config.comment.module_name");
     private final ConfigHotkey guiKeybind = new ConfigHotkey("GuiKeybind", "",
             KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.BOTH, false, true, true, false),
-            "config.comment.gui_keybind");
+            "config.comment.module_hotkey");
     public boolean isOpen;
     public boolean configure;
 
@@ -102,6 +102,7 @@ public class Module implements IKeybindProvider {
         json.add("Array", array);
         json.addProperty("Module Name", getNameConfig().getStringValue());
         json.addProperty("Enabled", enabled.getBooleanValue());
+        json.add("Gui Keybind", guiKeybind.getAsJsonElement());
         return json;
     }
 
@@ -110,6 +111,7 @@ public class Module implements IKeybindProvider {
         String value = json.get("Module Name").getAsString();
         getNameConfig().setValueFromString(value);
         enabled.setValueFromJsonElement(json.get("Enabled"));
+        guiKeybind.setValueFromJsonElement(json.get("Gui Keybind"));
 
         JsonArray array = json.getAsJsonArray("Array");
 
@@ -125,16 +127,15 @@ public class Module implements IKeybindProvider {
 
     private boolean openGui(KeyAction keyAction, IKeybind keybind) {
         Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-        MacroFactory.LOGGER.info("KeyAction "+keyAction + " screen "+ currentScreen);
         if (keyAction == KeyAction.RELEASE) {
-            if (currentScreen instanceof MacroSelectionScreen) {
+            if (currentScreen instanceof MacroSelectionGui) {
                 currentScreen.close();
                 return true;
             }
         }
         else {
             if (currentScreen == null) {
-                GuiBase.openGui(new MacroSelectionScreen(this));
+                GuiBase.openGui(new MacroSelectionGui(this));
                 return true;
             }
         }
