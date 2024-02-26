@@ -32,18 +32,17 @@ public class Configs implements IConfigHandler, IKeybindProvider {
     public void addKeysToMap(IKeybindManager manager) {
         manager.addKeybindToMap(Generic.MENU_OPEN.getKeybind());
         manager.addKeybindToMap(Generic.CMD_MACRO_OPEN.getKeybind());
-        manager.addKeybindToMap(Generic.TEST.getKeybind());
     }
 
     @Override
     public void addHotkeys(IKeybindManager manager) {
         manager.addHotkeysForCategory(MacroFactory.MOD_ID, "autoMacro.test", ImmutableList.of(
-                Generic.MENU_OPEN, Generic.CMD_MACRO_OPEN, Generic.TEST
+                Generic.MENU_OPEN, Generic.CMD_MACRO_OPEN
         ));
     }
 
     public static class Generic {
-        public static final ConfigHotkey MENU_OPEN = new HotKeyWithCallBack("menuOpen", "U", "Menu Open", (action, key) -> {
+        public static final ConfigHotkey MENU_OPEN = new HotKeyWithCallBack("menuOpen", "", "Menu Open", (action, key) -> {
             GuiBase.openGui(new ConfigsGui(null));
             return true;
         });
@@ -52,14 +51,10 @@ public class Configs implements IConfigHandler, IKeybindProvider {
             GuiBase.openGui(new ModulesGui(null));
             return true;
         });
-        public static final ConfigHotkey TEST = new HotKeyWithCallBack("test", "G", "", (action, key) -> {
-            MacroFactory.LOGGER.info("action: "+action+", key: "+key);
-            return true;
-        });
 
 
         public static final ImmutableList<IConfigValue> OPTIONS = ImmutableList.of(
-                MENU_OPEN, CMD_MACRO_OPEN, TEST
+                MENU_OPEN, CMD_MACRO_OPEN
         );
 
     }
