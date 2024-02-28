@@ -100,18 +100,18 @@ public class Module implements IKeybindProvider {
 
         JsonObject json = new JsonObject();
         json.add("Array", array);
-        json.addProperty("Module Name", getNameConfig().getStringValue());
-        json.addProperty("Enabled", enabled.getBooleanValue());
-        json.add("Gui Keybind", guiKeybind.getAsJsonElement());
+        SmokUtils.getAsJsonElement(json, name);
+        SmokUtils.getAsJsonElement(json, enabled);
+        SmokUtils.getAsJsonElement(json, guiKeybind);
         return json;
     }
 
     public void setValueFromJsonElement(JsonElement element) {
         JsonObject json = element.getAsJsonObject();
         String value = json.get("Module Name").getAsString();
-        getNameConfig().setValueFromString(value);
-        enabled.setValueFromJsonElement(json.get("Enabled"));
-        guiKeybind.setValueFromJsonElement(json.get("Gui Keybind"));
+        SmokUtils.setValueFromJsonElement(json, name);
+        SmokUtils.setValueFromJsonElement(json, enabled);
+        SmokUtils.setValueFromJsonElement(json, guiKeybind);
 
         JsonArray array = json.getAsJsonArray("Array");
 
