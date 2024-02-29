@@ -2,7 +2,6 @@ package net.smok.macrofactory.macros;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.config.IConfigValue;
 import fi.dy.masa.malilib.config.options.*;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
@@ -23,11 +22,10 @@ public class Macro {
     private final ConfigHotkey hotkey = new ConfigHotkey("Hotkey", "", "config.comment.macro_hotkey");
     private final ConfigOptionList actionType = new ConfigOptionList("Type", ActionType.Command, "config.comment.type");
     private final ConfigOptionList callType = new ConfigOptionList("Call", CallType.SINGLE, "config.comment.call");
-    private final ConfigInteger coolDown = new ConfigInteger("CoolDown", 0, 0, 20*60, "config.comment.cooldown");
+    private final ConfigInteger delay = new ConfigInteger("Delay", 0, 0, 20*60, "config.comment.cooldown");
 
     private final PlayerAction playerAction = new PlayerAction("Action", "config.comment.player_action");
-    private final CommandAction commandAction = new CommandAction("Action", "config.comment.command_action");
-    private final ConfigBoolean inChat = new ConfigBoolean("Chat", false, null);
+    private final CommandAction commandAction = new CommandAction("Action", "gui.button.chat" , "config.comment.command_action");
 
     public boolean configure;
 
@@ -52,19 +50,19 @@ public class Macro {
         this(module);
         this.name.setValueFromString(name);
         this.hotkey.setValueFromString(defaultHotkeys);
-        this.commandAction.setValueFromString(firstCommand);
+        this.commandAction.getCommand().setValueFromString(firstCommand);
         actionType.setOptionListValue(ActionType.Command);
     }
     public Macro(Module module, String firstCommand) {
         this(module);
-        this.commandAction.setValueFromString(firstCommand);
+        this.commandAction.getCommand().setValueFromString(firstCommand);
         actionType.setOptionListValue(ActionType.Command);
     }
-    public Macro(Module module, String name, String defaultHotkeys, boolean looped, int coolDown, PlayerKeybind playerActionKeybind) {
+    public Macro(Module module, String name, String defaultHotkeys, boolean looped, int delay, PlayerKeybind playerActionKeybind) {
         this(module);
         this.name.setValueFromString(name);
         this.hotkey.setValueFromString(defaultHotkeys);
-        this.coolDown.setIntegerValue(coolDown);
+        this.delay.setIntegerValue(delay);
         this.callType.setOptionListValue(looped ? CallType.REPEAT : CallType.SINGLE);
         this.playerAction.setOptionListValue(playerActionKeybind);
         actionType.setOptionListValue(ActionType.Player);
@@ -96,20 +94,11 @@ public class Macro {
     public ConfigOptionList getActionType() {
         return actionType;
     }
-    public IConfigValue getCoolDownConfig() {
-        return coolDown;
+    public IConfigValue getDelayConfig() {
+        return delay;
     }
     public ConfigOptionList getCallType() {
         return callType;
-    }
-    public void setInChat(boolean value) {
-        inChat.setBooleanValue(
-                actionType.getOptionListValue() == ActionType.Command &&
-                        callType.getOptionListValue() == CallType.SINGLE &&
-                        value);
-    }
-    public boolean isChat() {
-        return inChat.getBooleanValue();
     }
     @NotNull
     public String getSelectName() {
@@ -121,7 +110,7 @@ public class Macro {
                 return playerAction.getOptionListValue().getDisplayName();
             }
             case Command -> {
-                return commandAction.getStringValue();
+                return commandAction.getCommand().getStringValue();
             }
         }
         return "";
@@ -132,54 +121,38 @@ public class Macro {
 
     public JsonElement getAsJsonElement() {
         JsonObject json = new JsonObject();
-        getAsJsonElement(json, name);
-        getAsJsonElement(json, hotkey);
-        getAsJsonElement(json, coolDown);
-        getAsJsonElement(json, actionType);
-        getAsJsonElement(json, callType);
+        SmokUtils.getAsJsonElement(json, name);
+        SmokUtils.getAsJsonElement(json, hotkey);
+        SmokUtils.getAsJsonElement(json, delay);
+        SmokUtils.getAsJsonElement(json, actionType);
+        SmokUtils.getAsJsonElement(json, callType);
 
         switch ((ActionType)actionType.getOptionListValue()) {
 
-            case Player -> getAsJsonElement(json, playerAction);
-            case Command -> getAsJsonElement(json, commandAction);
+            case Player -> SmokUtils.getAsJsonElement(json, playerAction);
+            case Command -> json.add(commandAction.getName(), commandAction.getAsJsonElement());
         }
-        if (actionType.getOptionListValue() == ActionType.Command && callType.getOptionListValue() == CallType.SINGLE)
-            getAsJsonElement(json, inChat);
 
         return json;
     }
 
     public void setValueFromJsonElement(JsonElement element) {
         JsonObject json = element.getAsJsonObject();
-        setValueFromJsonElement(json, name);
-        setValueFromJsonElement(json, hotkey);
-        setValueFromJsonElement(json, coolDown);
-        setValueFromJsonElement(json, actionType);
+        SmokUtils.setValueFromJsonElement(json, name);
+        SmokUtils.setValueFromJsonElement(json, hotkey);
+        SmokUtils.setValueFromJsonElement(json, delay);
+        SmokUtils.setValueFromJsonElement(json, actionType);
 
-        setValueFromJsonElement(json, callType);
+        SmokUtils.setValueFromJsonElement(json, callType);
 
 
         switch ((ActionType)actionType.getOptionListValue()) {
 
-            case Player -> setValueFromJsonElement(json, playerAction);
-            case Command -> setValueFromJsonElement(json, commandAction);
+            case Player -> SmokUtils.setValueFromJsonElement(json, playerAction);
+            case Command -> commandAction.setValueFromJsonElement(json.get(commandAction.getName()));
         }
 
-        if (actionType.getOptionListValue() == ActionType.Command && callType.getOptionListValue() == CallType.SINGLE)
-            setValueFromJsonElement(json, inChat);
-
     }
-
-
-    private static void setValueFromJsonElement(JsonObject json, IConfigBase configBase) {
-        configBase.setValueFromJsonElement(json.get(configBase.getName()));
-    }
-    private static void getAsJsonElement(JsonObject json, IConfigBase configBase) {
-        json.add(configBase.getName(), configBase.getAsJsonElement());
-    }
-
-
-
 
 
     // Execute macro
@@ -217,7 +190,7 @@ public class Macro {
 
     public void tickLoop(MinecraftClient client) {
         if (cd <= 0) {
-            cd += coolDown.getIntegerValue();
+            cd += delay.getIntegerValue();
             getAction().run(client, MacroAction.Loop.TICK, this);
 
         } else {

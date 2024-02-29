@@ -6,12 +6,6 @@ import fi.dy.masa.malilib.util.StringUtils;
 public enum ActionType implements IConfigOptionListEntry {
     Player, Command;
 
-    public MacroAction getDefaultAction() {
-        return switch (this) {
-            case Player -> new PlayerAction();
-            case Command -> new CommandAction();
-        };
-    }
 
     @Override
     public String getStringValue() {

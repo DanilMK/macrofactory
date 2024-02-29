@@ -93,8 +93,8 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     protected void addGenericButton(boolean attachLeft, IGuiIcon icon, IButtonActionListener listener, @Nullable String comment) {
         addGenericButton(new PositionAlignment(attachLeft, icon), icon, listener, comment);
     }
-    protected void addSwitchButton(boolean attachLeft, IGuiIcon icon, boolean on, IButtonActionListener listener, @Nullable String comment) {
-        addSwitchButton(new PositionAlignment(attachLeft, icon), icon, on, listener, comment);
+    protected ButtonGeneric addSwitchButton(boolean attachLeft, IGuiIcon icon, boolean on, IButtonActionListener listener, @Nullable String comment) {
+        return addSwitchButton(new PositionAlignment(attachLeft, icon), icon, on, listener, comment);
     }
     protected void addGenericButton(PositionAlignment alignment, IGuiIcon icon, IButtonActionListener listener, @Nullable String comment) {
         Rect rect = addRect(alignment);

@@ -59,7 +59,7 @@ public final class ModuleWrapper implements FilteredEntry {
         switch (type) {
 
             case MACRO -> {
-                if (macro != null) return ImmutableList.of(macro.getName().toLowerCase(), macro.getCommandAction().getStringValue().toLowerCase());
+                if (macro != null) return ImmutableList.of(macro.getName().toLowerCase(), macro.getCommandAction().getCommand().getStringValue().toLowerCase());
 
             }
             case MODULE -> {
