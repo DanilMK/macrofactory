@@ -11,6 +11,7 @@ public class ModulesKeybindProvider implements IKeybindProvider {
     private IKeybindManager manager;
 
     public static void update() {
+
         INSTANCE.manager.updateUsedKeys();
     }
 

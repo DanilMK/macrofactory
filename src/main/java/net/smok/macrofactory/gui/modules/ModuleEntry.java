@@ -35,7 +35,7 @@ public class ModuleEntry extends GuiEntry<ModuleWrapper> {
         //addTextField(new PositionAlignment(true), module.getNameConfig(), COMMENT_MODULE_NAME, 256);
 
         if (module.configure) {
-            addTextField(new PositionAlignment(true), module.getNameConfig(), 20);
+            addTextField(new PositionAlignment(true), module.getNameConfig(), 30);
         } else {
             String name = module.getNameConfig().getStringValue();
             if (!name.isEmpty()) {

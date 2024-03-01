@@ -12,6 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.gui.selector.MacroSelectionGui;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,32 +70,29 @@ public class Module implements IKeybindProvider {
 
     @Override
     public void addKeysToMap(IKeybindManager manager) {
-        if (enabled.getBooleanValue())
-        {
-            manager.addKeybindToMap(guiKeybind.getKeybind());
-            for (Macro macro : macros) manager.addKeybindToMap(macro.getKeybind());
-        }
+        if (!enabled.getBooleanValue()) return;
+
+        manager.addKeybindToMap(guiKeybind.getKeybind());
+        for (Macro macro : macros) manager.addKeybindToMap(macro.getKeybind());
     }
 
     @Override
     public void addHotkeys(IKeybindManager manager) {
-        if (enabled.getBooleanValue())
-            manager.addHotkeysForCategory(MacroFactory.MOD_ID, MacroFactory.MOD_ID+'.'+ getNameConfig().getStringValue(), getHotkeys());
-    }
 
-    private List<? extends IHotkey> getHotkeys() {
+        if (!enabled.getBooleanValue()) return;
         List<IHotkey> hotkeys = new ArrayList<>();
         hotkeys.add(guiKeybind);
-        for (Macro macro : macros) {
-            hotkeys.add(macro.getHotkey());
-        }
-        return hotkeys;
+        for (Macro macro : macros) hotkeys.add(macro.getHotkey());
+
+        manager.addHotkeysForCategory(MacroFactory.MOD_ID,
+                MacroFactory.MOD_ID+'.'+ getNameConfig().getStringValue(), hotkeys);
     }
+
 
 
     // Save/load
 
-    public JsonElement getAsJsonElement() {
+    public JsonObject getAsJsonElement() {
         JsonArray array = new JsonArray();
         for (Macro macro : macros) array.add(macro.getAsJsonElement());
 
@@ -108,7 +106,6 @@ public class Module implements IKeybindProvider {
 
     public void setValueFromJsonElement(JsonElement element) {
         JsonObject json = element.getAsJsonObject();
-        String value = json.get("Module Name").getAsString();
         SmokUtils.setValueFromJsonElement(json, name);
         SmokUtils.setValueFromJsonElement(json, enabled);
         SmokUtils.setValueFromJsonElement(json, guiKeybind);

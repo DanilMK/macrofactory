@@ -114,10 +114,9 @@ public class Configs implements IConfigHandler, IKeybindProvider {
             try {
                 JsonElement element = JsonUtils.parseJsonFile(moduleFile);
                 if (element == null || !element.isJsonObject()) continue;
-                JsonObject json = element.getAsJsonObject();
 
                 Module module = new Module();
-                module.setValueFromJsonElement(json.get("Module"));
+                module.setValueFromJsonElement(element);
 
 
                 modules.add(module);
@@ -154,12 +153,11 @@ public class Configs implements IConfigHandler, IKeybindProvider {
         if ((macrosDir.exists() && macrosDir.isDirectory()) || macrosDir.mkdirs()) {
 
             File[] files = macrosDir.listFiles(pathname -> pathname.getName().endsWith(".json"));
-            if (files != null) for (File file : files) file.delete();
+            if (files != null) for (File file : files) //noinspection ResultOfMethodCallIgnored
+                file.delete();
 
             for (Module module : Macros.Modules) {
-                JsonObject macrosJson = new JsonObject();
-                macrosJson.add("Module", module.getAsJsonElement());
-                JsonUtils.writeJsonToFile(macrosJson, new File(macrosDir, module.getName() + ".json"));
+                JsonUtils.writeJsonToFile(module.getAsJsonElement(), new File(macrosDir, module.getName() + ".json"));
             }
         }
     }

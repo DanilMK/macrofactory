@@ -78,6 +78,7 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
     protected void closeGui(boolean showParent) {
         super.closeGui(showParent);
 
+
         ModulesKeybindProvider.update();
     }
 /*
