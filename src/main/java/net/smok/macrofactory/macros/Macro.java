@@ -8,6 +8,8 @@ import fi.dy.masa.malilib.hotkeys.IKeybind;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
 import fi.dy.masa.malilib.hotkeys.KeybindSettings;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.item.ItemStack;
+import net.smok.macrofactory.HotKeyWithCallBack;
 import net.smok.macrofactory.PlayerKeybind;
 import net.smok.macrofactory.TickLoop;
 import net.smok.macrofactory.macros.actions.*;
@@ -19,10 +21,11 @@ public class Macro {
 
     // Configs
     private final ConfigString name = new ConfigString("Name", "", "config.comment.macro_name");
-    private final ConfigHotkey hotkey = new ConfigHotkey("Hotkey", "", "config.comment.macro_hotkey");
+    private final ConfigHotkey hotkey = new HotKeyWithCallBack("Hotkey", "", KeybindSettings.INGAME_BOTH,"config.comment.macro_hotkey", this::onKeyAction);
     private final ConfigOptionList actionType = new ConfigOptionList("Type", ActionType.Command, "config.comment.type");
     private final ConfigOptionList callType = new ConfigOptionList("Call", CallType.SINGLE, "config.comment.call");
-    private final ConfigInteger delay = new ConfigInteger("Delay", 0, 0, 20*60, "config.comment.cooldown");
+    private final ConfigInteger delay = new ConfigInteger("Delay", 0, 0, 20*60, "config.comment.delay");
+    private final ItemIcon icon = new ItemIcon("Icon", ItemStack.EMPTY, "config.comment.icon");
 
     private final PlayerAction playerAction = new PlayerAction("Action", "config.comment.player_action");
     private final CommandAction commandAction = new CommandAction("Action", "gui.button.chat" , "config.comment.command_action");
@@ -38,8 +41,6 @@ public class Macro {
 
     public Macro(Module module) {
         this.module = module;
-        hotkey.getKeybind().setSettings(KeybindSettings.INGAME_BOTH);
-        hotkey.getKeybind().setCallback(this::onKeyAction);
     }
     public Macro(Module module, String name, String defaultHotkeys) {
         this(module);
@@ -100,6 +101,10 @@ public class Macro {
     public ConfigOptionList getCallType() {
         return callType;
     }
+    public ItemIcon getIcon() {
+        return icon;
+    }
+
     @NotNull
     public String getSelectName() {
         if (!name.getStringValue().isEmpty()) return name.getStringValue();
@@ -126,6 +131,7 @@ public class Macro {
         SmokUtils.getAsJsonElement(json, delay);
         SmokUtils.getAsJsonElement(json, actionType);
         SmokUtils.getAsJsonElement(json, callType);
+        SmokUtils.getAsJsonElement(json, icon);
 
         switch ((ActionType)actionType.getOptionListValue()) {
 
@@ -142,8 +148,9 @@ public class Macro {
         SmokUtils.setValueFromJsonElement(json, hotkey);
         SmokUtils.setValueFromJsonElement(json, delay);
         SmokUtils.setValueFromJsonElement(json, actionType);
-
         SmokUtils.setValueFromJsonElement(json, callType);
+        SmokUtils.setValueFromJsonElement(json, icon);
+
 
 
         switch ((ActionType)actionType.getOptionListValue()) {

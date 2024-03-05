@@ -27,6 +27,9 @@ public class RectContainer {
     public int getLineY() {
         return y + (lineHeight + spaceY) * line;
     }
+    public int getMinY() {
+        return y;
+    }
 
     public int maxWidth() {
         return maxEmptyX - minEmptyX;

@@ -13,7 +13,7 @@
   "config.comment.module_name" : "Module Name",
   "config.comment.macro_hotkey": "Keybind for macro activation",
   "config.comment.module_hotkey": "Keybind for open macro list and fast call macro",
-  "config.comment.cooldown" : "Delay between activation in ticks",
+  "config.comment.delay" : "Delay between activation in ticks",
   "config.comment.type" : "Kind of macro action",
   "config.comment.player_action" : "Player action",
   "config.comment.command_action" : "Command/Message action",
@@ -28,5 +28,7 @@
   "gui.button.chat" : "Command will be typed in chat screen without execute",
   "config.value.call_type.single" : "Single",
   "config.value.call_type.repeat" : "Repeat",
-  "config.value.call_type.hold" : "Hold"
+  "config.value.call_type.hold" : "Hold",
+  "config.comment.icon" : "Macro icon\nClick to set item from main hand on icon",
+  "gui.empty_module" : "Module is empty"
 }

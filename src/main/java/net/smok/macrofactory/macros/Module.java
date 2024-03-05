@@ -10,6 +10,7 @@ import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.hotkeys.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.smok.macrofactory.HotKeyWithCallBack;
 import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.gui.selector.MacroSelectionGui;
 
@@ -21,16 +22,14 @@ public class Module implements IKeybindProvider {
     private final ArrayList<Macro> macros = new ArrayList<>();
     private final ConfigBoolean enabled = new ConfigBoolean("Enabled", true, null);
     private final ConfigString name = new ConfigString("Name", "module.default.new", "config.comment.module_name");
-    private final ConfigHotkey guiKeybind = new ConfigHotkey("GuiKeybind", "",
-            KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.BOTH, false, true, true, false),
-            "config.comment.module_hotkey");
+    private final ConfigHotkey guiKeybind = new HotKeyWithCallBack("GuiKeybind", "",
+            KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.BOTH, false, true, false, false),
+            "config.comment.module_hotkey", this::openGui);
     public boolean isOpen;
     public boolean configure;
 
 
-    public Module() {
-        guiKeybind.getKeybind().setCallback(this::openGui);
-    }
+    public Module() {}
 
 
     public Module(String name) {

@@ -17,6 +17,7 @@ public enum MacroIcons implements IGuiIcon {
     MACRO_REMOVE(0, 160, 20, 20),
     MACRO_BUTTON(0, 180, 20, 20),
     MACRO_EMPTY_ICON(100, 0, 20, 20),
+    MACRO_EMPTY_BUTTON(100, 40, 20, 20),
     CHAT(0, 200, 20, 20);
 
     public static final Identifier TEXTURE = new Identifier(MacroFactory.MOD_ID, "textures/icons.png");

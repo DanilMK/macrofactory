@@ -1,6 +1,7 @@
 package net.smok.macrofactory.gui.selector;
 
 import fi.dy.masa.malilib.gui.GuiBase;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.smok.macrofactory.gui.PositionAlignment;
 import net.smok.macrofactory.gui.Rect;
@@ -56,8 +57,8 @@ public class MacroSelectionGui extends GuiBase {
         rectContainer = new RectContainer(containerSpace, containerSpace, minX, minX + maxWidth, minY, selectorSize);
 
         // Fill the rect container with widgets
-        for (int line = 0; line < maxLines; line++) {
-            for (int column = 0, i = 0; column < maxColumns; column++, i++) {
+        for (int line = 0, i = 0; line < maxLines; line++) {
+            for (int column = 0; column < maxColumns && i < macroList.size(); column++, i++) {
                 Macro macro = macroList.get(i);
                 Rect rect = rectContainer.addRect(new PositionAlignment(true, selectorSize));
                 MacroWidget widget = new MacroWidget(rect.x(), rect.y(), rect.width(), rect.height(), macro);
@@ -72,8 +73,13 @@ public class MacroSelectionGui extends GuiBase {
     @Override
     public void render(DrawContext drawContext, int mouseX, int mouseY, float partialTicks) {
 
-        String text = selectedWidget != null ? selectedWidget.getSelectName() : module.getName();
-        drawContext.drawCenteredTextWithShadow(textRenderer, text, width / 2, rectContainer.getLineY() - 20, -1);
+        String mainText = selectedWidget != null ? selectedWidget.getSelectName() : module.getName();
+        drawContext.drawCenteredTextWithShadow(textRenderer, StringUtils.translate(mainText), width / 2, rectContainer.getMinY() - 20, -1);
+        if (module.getAll().isEmpty())
+        {
+            drawContext.drawCenteredTextWithShadow(textRenderer, StringUtils.translate("gui.empty_module"), width / 2, rectContainer.getMinY(), -1);
+            return;
+        }
 
         boolean mouseIsMove = this.lastMouseX != mouseX || this.lastMouseY != mouseY;
 

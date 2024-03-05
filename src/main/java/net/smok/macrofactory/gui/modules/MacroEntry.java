@@ -6,6 +6,7 @@ import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
 import net.smok.macrofactory.gui.*;
+import net.smok.macrofactory.gui.selector.ItemIconWidget;
 import net.smok.macrofactory.macros.CallType;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.gui.utils.ListEntryBox;
@@ -60,6 +61,8 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
         if (macro.configure) {
             addLine();
 
+            ButtonGeneric iconButton = addGenericButton(true, MacroIcons.MACRO_EMPTY_BUTTON, macro.getIcon()::setIconFromHand, macro.getIcon().getComment());
+            addWidget(new ItemIconWidget(iconButton.getX(), iconButton.getY(), iconButton.getWidth(), iconButton.getHeight(), macro.getIcon(), MacroIcons.MACRO_EMPTY_ICON));
             delayText = addTextField(new PositionAlignment(false, 40 + space()), macro.getDelayConfig(), 4);
             addOptionListButton(new PositionAlignment(false, 120), macro.getCallType(), this::changeCallType);
             addOptionListButton(new PositionAlignment(true, 200), macro.getActionType(), this::changeActionType);

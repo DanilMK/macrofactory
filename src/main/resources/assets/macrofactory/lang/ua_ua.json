@@ -13,7 +13,7 @@
   "config.comment.module_name" : "Назва модуля",
   "config.comment.macro_hotkey": "Гаряча клавіша для активації макросу",
   "config.comment.module_hotkey": "Гаряча клавіша для відкриття списку макросів і швидкого виклику макросу",
-  "config.comment.cooldown" : "Затримка між активаціями в тиках",
+  "config.comment.delay" : "Затримка між активаціями в тиках",
   "config.comment.type" : "Вид дії макросу",
   "config.comment.player_action" : "Дія гравця",
   "config.comment.command_action" : "Дія команди/повідомлення",
@@ -28,5 +28,7 @@
   "gui.button.chat" : "Команда буде введена на екрані чату без виконання",
   "config.value.call_type.single" : "Одноразовий",
   "config.value.call_type.repeat" : "Повторюваний",
-  "config.value.call_type.hold" : "Утримуваний"
+  "config.value.call_type.hold" : "Утримуваний",
+  "config.comment.icon" : "Macro icon\nClick to set item from main hand on icon",
+  "gui.empty_module" : "Module is empty"
 }
