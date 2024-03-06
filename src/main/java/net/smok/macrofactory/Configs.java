@@ -20,7 +20,9 @@ import net.smok.macrofactory.macros.Module;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Configs implements IConfigHandler, IKeybindProvider {
 
@@ -150,15 +152,23 @@ public class Configs implements IConfigHandler, IKeybindProvider {
 
     private static void writeMacros(File dir) {
         File macrosDir = new File(dir, MACRO_DIR);
-        if ((macrosDir.exists() && macrosDir.isDirectory()) || macrosDir.mkdirs()) {
+        if ((!macrosDir.exists() || !macrosDir.isDirectory()) && !macrosDir.mkdirs()) return;
 
-            File[] files = macrosDir.listFiles(pathname -> pathname.getName().endsWith(".json"));
-            if (files != null) for (File file : files) //noinspection ResultOfMethodCallIgnored
-                file.delete();
+        File[] files = macrosDir.listFiles(pathname -> pathname.getName().endsWith(".json"));
+        if (files != null) for (File file : files) //noinspection ResultOfMethodCallIgnored
+            file.delete();
 
-            for (Module module : Macros.Modules) {
+        Map<String, Integer> count = new HashMap<>();
+
+        for (Module module : Macros.Modules) {
+            int n = 0;
+            if (count.containsKey(module.getName())) n = count.get(module.getName());
+
+            count.put(module.getName(), n + 1);
+            if (n == 0)
                 JsonUtils.writeJsonToFile(module.getAsJsonElement(), new File(macrosDir, module.getName() + ".json"));
-            }
+            else JsonUtils.writeJsonToFile(module.getAsJsonElement(), new File(macrosDir, module.getName() + n + ".json"));
+
         }
     }
 }
