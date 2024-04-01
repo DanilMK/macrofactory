@@ -24,11 +24,21 @@ public class RectContainer {
         minEmptyX = minX;
         maxEmptyX = maxX;
     }
+    public void addLines(int amount) {
+        line += amount;
+        height = (lineHeight + spaceY) * (line + 1);
+        minEmptyX = minX;
+        maxEmptyX = maxX;
+    }
     public int getLineY() {
         return y + (lineHeight + spaceY) * line;
     }
     public int getMinY() {
         return y;
+    }
+
+    public int getLineHeight() {
+        return lineHeight;
     }
 
     public int maxWidth() {

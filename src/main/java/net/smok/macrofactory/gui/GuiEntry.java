@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
 
@@ -172,6 +173,16 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
             textField.onGuiClosed();
             lastAppliedValue = textField.getTextField().getText();
         }
+    }
+
+    @Override
+    public boolean isMouseOver(int mouseX, int mouseY) {
+        if (super.isMouseOver(mouseX, mouseY)) return true;
+        if (!subWidgets.isEmpty())
+            for (WidgetBase widget : subWidgets)
+                if (widget.isMouseOver(mouseX, mouseY)) return true;
+
+        return false;
     }
 
     @Override

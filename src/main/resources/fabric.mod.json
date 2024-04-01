@@ -7,6 +7,9 @@
 	"authors": [
 		"Smok419"
 	],
+	"contact": {
+		"sources": "https://github.com/DanilMK/macrofactory"
+	},
 	"license": "MIT",
 	"icon": "assets/macrofactory/icon.png",
 	"environment": "*",

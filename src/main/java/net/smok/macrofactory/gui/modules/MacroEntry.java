@@ -5,11 +5,14 @@ import fi.dy.masa.malilib.gui.GuiTextFieldGeneric;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
-import net.smok.macrofactory.gui.*;
+import net.smok.macrofactory.gui.GuiEntry;
+import net.smok.macrofactory.gui.GuiList;
+import net.smok.macrofactory.gui.MacroIcons;
+import net.smok.macrofactory.gui.PositionAlignment;
 import net.smok.macrofactory.gui.selector.ItemIconWidget;
+import net.smok.macrofactory.gui.utils.ListEntryBox;
 import net.smok.macrofactory.macros.CallType;
 import net.smok.macrofactory.macros.Macro;
-import net.smok.macrofactory.gui.utils.ListEntryBox;
 import net.smok.macrofactory.macros.actions.ActionType;
 import net.smok.macrofactory.macros.actions.CommandAction;
 
@@ -73,6 +76,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
         addWidget(new ListEntryBox(x - 2, y - 1, 1, getHeight() + 1, true, false));
 
     }
+
 
     private void changeCallType(ButtonBase buttonBase, int mouseButton) {
         Macro macro = ModuleWrapper.getMacro(entry);

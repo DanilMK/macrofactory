@@ -10,6 +10,7 @@ import net.smok.macrofactory.gui.modules.ModulesGui;
 
 import java.util.List;
 
+@Deprecated
 public class ConfigsGui extends GuiConfigsBase {
 
 
