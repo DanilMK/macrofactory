@@ -64,8 +64,7 @@ public class ItemIcon extends ConfigBase<ItemIcon> implements IConfigBase {
         itemStack = defaultItemStack;
     }
 
-    public void setIconFromHand(ButtonBase buttonBase, int mouseButton) {
-        if (mouseButton != 0) return;
+    public void setIconFromHand() {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
         setItemStack(client.player.getInventory().getMainHandStack());
