@@ -12,7 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.smok.macrofactory.HotKeyWithCallBack;
 import net.smok.macrofactory.MacroFactory;
-import net.smok.macrofactory.gui.selector.MacroSelectionGui;
+import net.smok.macrofactory.guiold.selector.MacroSelectionGui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +20,14 @@ import java.util.List;
 public class Module implements IKeybindProvider {
 
     private final ArrayList<Macro> macros = new ArrayList<>();
-    private final ConfigBoolean enabled = new ConfigBoolean("Enabled", true, null);
+    private final ConfigBoolean enabled = new ConfigBoolean("Enabled", true, "guiold.button.module_enabled");
     private final ConfigString name = new ConfigString("Name", "module.default.new", "config.comment.module_name");
     private final ConfigHotkey guiKeybind = new HotKeyWithCallBack("GuiKeybind", "",
             KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.BOTH, false, true, false, false),
             "config.comment.module_hotkey", this::openGui);
-    public boolean isOpen;
+    public final ConfigBoolean isOpen = new ConfigBoolean("OpenFolder", false, "guiold.button.module_open");
     public boolean configure;
+    private final ConfigBoolean isConfigure = new ConfigBoolean("Configure", false, "guiold.button.module_configure");
 
 
     public Module() {}
@@ -37,7 +38,7 @@ public class Module implements IKeybindProvider {
     }
     public Module(String name, boolean open) {
         this.name.setValueFromString(name);
-        this.isOpen = open;
+        isOpen.setBooleanValue(open);
     }
 
 
@@ -64,6 +65,14 @@ public class Module implements IKeybindProvider {
     }
     public ConfigHotkey getGuiKeybind() {
         return guiKeybind;
+    }
+
+    public ConfigBoolean getIsOpen() {
+        return isOpen;
+    }
+
+    public ConfigBoolean getIsConfigure() {
+        return isConfigure;
     }
 
     @Override

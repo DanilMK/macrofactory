@@ -9,7 +9,7 @@ import fi.dy.masa.malilib.gui.button.ButtonBase;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.smok.macrofactory.gui.ButtonSwitch;
+import net.smok.macrofactory.guiold.ButtonSwitch;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.SmokUtils;
 import org.jetbrains.annotations.NotNull;

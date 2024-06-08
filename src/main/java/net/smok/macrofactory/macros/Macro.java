@@ -28,9 +28,10 @@ public class Macro {
     private final ItemIcon icon = new ItemIcon("Icon", ItemStack.EMPTY, "config.comment.icon");
 
     private final PlayerAction playerAction = new PlayerAction("Action", "config.comment.player_action");
-    private final CommandAction commandAction = new CommandAction("Action", "gui.button.chat" , "config.comment.command_action");
+    private final CommandAction commandAction = new CommandAction("Action", "guiold.button.chat" , "config.comment.command_action");
 
     public boolean configure;
+    private final ConfigBoolean isConfigure = new ConfigBoolean("Configure", false, "guiold.button.macro_configure");
 
     private final Module module;
 
@@ -71,6 +72,10 @@ public class Macro {
 
     // Access
 
+
+    public ConfigBoolean getIsConfigure() {
+        return isConfigure;
+    }
     public ConfigHotkey getHotkey() {
         return hotkey;
     }
@@ -95,7 +100,7 @@ public class Macro {
     public ConfigOptionList getActionType() {
         return actionType;
     }
-    public IConfigValue getDelayConfig() {
+    public ConfigInteger getDelayConfig() {
         return delay;
     }
     public ConfigOptionList getCallType() {

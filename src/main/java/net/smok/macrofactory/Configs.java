@@ -6,15 +6,12 @@ import com.google.gson.JsonObject;
 import fi.dy.masa.malilib.config.ConfigUtils;
 import fi.dy.masa.malilib.config.IConfigHandler;
 import fi.dy.masa.malilib.config.IConfigValue;
-import fi.dy.masa.malilib.config.options.ConfigHotkey;
-import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.hotkeys.IKeybindManager;
 import fi.dy.masa.malilib.hotkeys.IKeybindProvider;
 import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.smok.macrofactory.gui.ConfigsGui;
-import net.smok.macrofactory.gui.modules.ModulesGui;
+import net.smok.macrofactory.gui.ModulesScreen;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.Module;
 
@@ -32,29 +29,16 @@ public class Configs implements IConfigHandler, IKeybindProvider {
 
     @Override
     public void addKeysToMap(IKeybindManager manager) {
-        manager.addKeybindToMap(Generic.CMD_MACRO_OPEN.getKeybind());
+        manager.addKeybindToMap(ModulesScreen.SCREEN_OPEN_KEY.getKeybind());
     }
 
     @Override
     public void addHotkeys(IKeybindManager manager) {
         manager.addHotkeysForCategory(MacroFactory.MOD_ID, "autoMacro.test", ImmutableList.of(
-                Generic.CMD_MACRO_OPEN
+                ModulesScreen.SCREEN_OPEN_KEY
         ));
     }
 
-    public static class Generic {
-
-        public static final ConfigHotkey CMD_MACRO_OPEN = new HotKeyWithCallBack("cmdMacroOpen", "Y", "Menu Open", (action, key) -> {
-            GuiBase.openGui(new ModulesGui(null));
-            return true;
-        });
-
-
-        public static final ImmutableList<IConfigValue> OPTIONS = ImmutableList.of(
-                CMD_MACRO_OPEN
-        );
-
-    }
 
     public static class Macros {
 
@@ -91,7 +75,9 @@ public class Configs implements IConfigHandler, IKeybindProvider {
 
         try
         {
-            ConfigUtils.readConfigBase(root, "Generic", Generic.OPTIONS);
+            ConfigUtils.readConfigBase(root, "Generic", ImmutableList.<IConfigValue>of(
+                    ModulesScreen.SCREEN_OPEN_KEY
+            ));
 
         } catch (Exception ignored) {
             MacroFactory.LOGGER.info("Corrupted Options file. ");
@@ -140,7 +126,9 @@ public class Configs implements IConfigHandler, IKeybindProvider {
         if ((dir.exists() && dir.isDirectory()) || dir.mkdirs())
         {
             JsonObject genericJson = new JsonObject();
-            ConfigUtils.writeConfigBase(genericJson, "Generic", Generic.OPTIONS);
+            ConfigUtils.writeConfigBase(genericJson, "Generic", ImmutableList.<IConfigValue>of(
+                    ModulesScreen.SCREEN_OPEN_KEY
+            ));
             JsonUtils.writeJsonToFile(genericJson, new File(dir, CONFIG_FILE_NAME));
         }
     }
