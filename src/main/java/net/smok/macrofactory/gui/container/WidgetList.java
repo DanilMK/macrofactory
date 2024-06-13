@@ -7,12 +7,10 @@ import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ScrollableWidget;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.text.Text;
 import net.smok.macrofactory.MacroFactory;
+import net.smok.macrofactory.gui.base.WidgetBase;
 import net.smok.macrofactory.guiold.FilteredEntry;
-import net.smok.macrofactory.gui.base.BoxRender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,32 +18,26 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidget implements ParentContainer {
+public abstract class WidgetList<T extends FilteredEntry> extends WidgetBase implements ParentContainer {
 
 
     private final List<WidgetListEntry<T>> widgetEntries = new ArrayList<>();
     private final ParentElement parent;
-    private int space = 5;
-    private int nextPosition;
+    private final ScrollableContainer container;
+    private int space;
     private WidgetSearch widgetSearchBar;
     private int browserEntriesOffsetY;
-    private BoxRender box;
 
     private Element focused;
     private boolean dragging;
 
-    public WidgetList(int x, int y, int w, int h, ParentElement parent) {
-        super(x, y, w, h, Text.empty());
+    public WidgetList(int x, int y, int w, int h, int space, ParentElement parent) {
+        super(x, y, w, h);
         this.parent = parent;
+        this.space = space;
+        this.container = new ScrollableContainer(x, y, w, h, Text.empty(), 1, space, parent);
 
         refreshPositions();
-        /*
-        widgetEntries.clear();
-        nextPosition = getEntryStartY();
-        MacroFactory.LOGGER.info("Refresh entries");
-
-        if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
-        else addFilteredContents(this::createWidgetEntry);*/
     }
 
     @Override
@@ -55,15 +47,17 @@ public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidg
 
     @Override
     public List<Element> children() {
-        ArrayList<Element> result = new ArrayList<>(widgetEntries);
+        ArrayList<Element> result = new ArrayList<>();
         if (widgetSearchBar != null) result.add(widgetSearchBar);
+        result.add(container);
         return result;
     }
 
     @Override
     public List<Drawable> drawables() {
-        ArrayList<Drawable> result = new ArrayList<>(widgetEntries);
+        ArrayList<Drawable> result = new ArrayList<>();
         if (widgetSearchBar != null) result.add(widgetSearchBar);
+        result.add(container);
         return result;
     }
 
@@ -83,76 +77,8 @@ public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidg
     }
 
 
-    @Override
-    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (!this.visible) return;
-
-        if (widgetSearchBar != null) widgetSearchBar.render(context, mouseX, mouseY, delta);
-        if (box != null) box.drawBox(context, getEntryStartX(), getEntryStartY(), getEntryWidth(), getHeight() - browserEntriesOffsetY);
-
-        context.enableScissor(getEntryStartX(), getEntryStartY(), getEntryStartX() + getEntryWidth(), getEntryStartY() + getHeight());
-
-        if (mouseY < getY() || mouseY > getY() + getHeight()) mouseY = -1;
-        else mouseY += (int) getScrollY();
-
-        context.getMatrices().push();
-        context.getMatrices().translate(0.0, -this.getScrollY(), 0.0);
-        this.renderContents(context, mouseX, mouseY, delta);
-        context.getMatrices().pop();
-        context.disableScissor();
-        this.renderOverlay(context);
-    }
-
-    @Override
-    protected void renderContents(DrawContext context, int mouseX, int mouseY, float delta) {
-        for (WidgetListEntry<T> entry : widgetEntries) {
-            entry.render(context, mouseX, mouseY, delta);
-        }
-    }
 
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        boolean clicked = super.mouseClicked(mouseX, mouseY, button);
-        if (!clicked) return false;
-
-        if (isWithinBounds(mouseX, mouseY)) ParentContainer.super.mouseClicked(mouseX, mouseY + getScrollY(), button);
-        return true;
-    }
-
-    @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        super.mouseReleased(mouseX, mouseY, button);
-        return ParentContainer.super.mouseReleased(mouseX, mouseY + getScrollY(), button);
-    }
-    @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
-
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (ParentContainer.super.keyPressed(keyCode, scanCode, modifiers)) {
-            if (getFocused() instanceof Widget widget) {
-
-                setScrollY((double) (widget.getY() - getY()) * getMaxScrollY() / getContentsHeight());
-            }
-            return true;
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
-
-
-    // Public get/set
-
-
-    public BoxRender getBox() {
-        return box;
-    }
-
-    public void setBox(BoxRender box) {
-        this.box = box;
-    }
 
     @Nullable
     @Override
@@ -202,7 +128,7 @@ public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidg
     }
 
     protected int getEntryStartX() {
-        return getX();
+        return getX() + 1;
     }
 
     protected int getEntryStartY() {
@@ -214,17 +140,7 @@ public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidg
     }
 
     protected int getEntryWidth() {
-        return getWidth() - getPadding();
-    }
-
-    @Override
-    protected int getContentsHeight() {
-        return nextPosition;
-    }
-
-    @Override
-    protected double getDeltaYPerScroll() {
-        return 9;
+        return container.getWidth() - 2;
     }
 
 
@@ -233,7 +149,7 @@ public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidg
     // Creating content
     public void refreshEntries() {
         widgetEntries.clear();
-        nextPosition = getEntryStartY();
+        container.clear();
         MacroFactory.LOGGER.info("Refresh entries");
 
         if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
@@ -243,7 +159,7 @@ public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidg
     public void refreshPositions() {
         Map<T, WidgetListEntry<T>> oldEntries = widgetEntries.stream().collect(Collectors.toMap(WidgetListEntry::getEntry, entry -> entry));
         widgetEntries.clear();
-        nextPosition = getEntryStartY();
+        container.clear();
         MacroFactory.LOGGER.info("Refresh positions");
 
         if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(t -> refreshWidgetEntry(t, oldEntries));
@@ -256,9 +172,8 @@ public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidg
             WidgetListEntry<T> entry = oldEntries.get(t);
             oldEntries.remove(t);
             if (entry == null) return;
-            entry.setY(nextPosition);
             widgetEntries.add(entry);
-            nextPosition += entry.getHeight() + space;
+            container.add(entry);
         } else createWidgetEntry(t);
     }
 
@@ -300,10 +215,10 @@ public abstract class WidgetList<T extends FilteredEntry> extends ScrollableWidg
 
     private void createWidgetEntry(T entry) {
         if (entry == null) return;
-        WidgetListEntry<T> widgetEntry = createWidgetEntry(entry, getEntryStartX(), nextPosition, getEntryWidth(), getEntryHeight());
+        WidgetListEntry<T> widgetEntry = createWidgetEntry(entry, container.getContainer().nextX(), container.getContainer().nextY(), getEntryWidth(), getEntryHeight());
         if (widgetEntry == null) return;
         widgetEntries.add(widgetEntry);
-        nextPosition += widgetEntry.getHeight() + space;
+        container.add(widgetEntry);
     }
 
     protected abstract WidgetListEntry<T> createWidgetEntry(T entry, int entryX, int entryY, int entryWidth, int entryHeight);

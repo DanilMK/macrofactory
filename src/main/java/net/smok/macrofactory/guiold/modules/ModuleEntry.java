@@ -4,6 +4,7 @@ import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
 import net.smok.macrofactory.Configs;
+import net.smok.macrofactory.gui.MacroIcons;
 import net.smok.macrofactory.guiold.*;
 import net.smok.macrofactory.guiold.utils.ListEntryBox;
 import net.smok.macrofactory.macros.Macro;

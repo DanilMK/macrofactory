@@ -21,9 +21,9 @@ public class ScrollableContainer extends ScrollableWidget implements ParentConta
 
 
 
-    public ScrollableContainer(int x, int y, int w, int h, Text text, int space, ParentElement parent) {
+    public ScrollableContainer(int x, int y, int w, int h, Text text, int padding, int space, ParentElement parent) {
         super(x, y, w, h, text);
-        container = new FixedContainer(x, y, w, h, space, true, parent);
+        container = new FixedContainer(x + padding, y + padding, w - padding * 2, h - padding * 2, space, true, parent);
     }
 
     @Override
@@ -134,8 +134,15 @@ public class ScrollableContainer extends ScrollableWidget implements ParentConta
         return container.addDrawable(drawableChild);
     }
 
-
     public <T extends Widget> Widget add(T widget) {
         return container.add(widget);
+    }
+
+    public void clear() {
+        container.clear();
+    }
+
+    public FixedContainer getContainer() {
+        return container;
     }
 }

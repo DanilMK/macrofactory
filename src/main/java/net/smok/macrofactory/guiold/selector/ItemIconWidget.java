@@ -4,17 +4,19 @@ import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.gui.widgets.WidgetBase;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
+import net.smok.macrofactory.gui.base.GuiIcon;
+import net.smok.macrofactory.gui.base.IconWidget;
 import net.smok.macrofactory.macros.ItemIcon;
 
 public class ItemIconWidget extends WidgetBase implements Drawable {
 
     private final ItemIcon itemIcon;
-    private final IGuiIcon defaultIcon;
+    private final IconWidget defaultIcon;
 
-    public ItemIconWidget(int x, int y, int width, int height, ItemIcon itemIcon, IGuiIcon defaultIcon) {
+    public ItemIconWidget(int x, int y, int width, int height, ItemIcon itemIcon, GuiIcon defaultIcon) {
         super(x, y, width, height);
         this.itemIcon = itemIcon;
-        this.defaultIcon = defaultIcon;
+        this.defaultIcon = new IconWidget(x, y, width, height, defaultIcon);
     }
 
 
@@ -25,8 +27,7 @@ public class ItemIconWidget extends WidgetBase implements Drawable {
         if (itemIcon.isModified()) {
             itemIcon.drawIcon(drawContext, x, y, width, height);
         } else {
-            bindTexture(defaultIcon.getTexture());
-            defaultIcon.renderAt(x, y, 0, false, false);
+            defaultIcon.render(drawContext, mouseX, mouseY, 0);
         }
     }
 

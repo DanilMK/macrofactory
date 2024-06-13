@@ -1,10 +1,11 @@
 package net.smok.macrofactory.gui;
 
 import fi.dy.masa.malilib.config.options.ConfigHotkey;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.smok.macrofactory.Configs;
 import net.smok.macrofactory.HotKeyWithCallBack;
-import net.smok.macrofactory.guiold.MacroIcons;
+import net.smok.macrofactory.ModulesKeybindProvider;
 import net.smok.macrofactory.gui.base.*;
 import net.smok.macrofactory.gui.module.ModulesList;
 import net.smok.macrofactory.macros.Module;
@@ -19,6 +20,10 @@ public class ModulesScreen extends GuiBase {
 
     public ModulesScreen() {
         super(Text.translatable("gui.title.screen_module"));
+    }
+
+    public ModulesScreen(Screen parent) {
+        super(Text.of("Modules"));
     }
 
 
@@ -40,11 +45,8 @@ public class ModulesScreen extends GuiBase {
     protected void init() {
         super.init();
 
-        ModulesList modulesList = addDrawableChild(new ModulesList(20, 50, width - 50, height - 100, this));
-        modulesList.setSpace(3);
+        ModulesList modulesList = addDrawableChild(new ModulesList(20, 50, width - 50, height - 100, 3, this));
 
-
-        //addDrawable(new BoxWidget(10, 100, 100, 40));
 
         GuiIcon folderIcon = MacroIcons.FOLDER_ADD;
         int folderX = width - folderIcon.getWidth();
@@ -52,18 +54,15 @@ public class ModulesScreen extends GuiBase {
         ButtonBase folderButton = new ButtonBase(folderX, folderY, folderIcon, button -> {
             Configs.Macros.Modules.add(new Module("Mew Module", true));
             modulesList.refreshPositions();
-        /*
-        widgetEntries.clear();
-        nextPosition = getEntryStartY();
-        MacroFactory.LOGGER.info("Refresh entries");
-
-        if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
-        else addFilteredContents(this::createWidgetEntry);*/
         });
 
         addDrawableChild(folderButton);
 
     }
 
-
+    @Override
+    public void close() {
+        super.close();
+        ModulesKeybindProvider.update();
+    }
 }

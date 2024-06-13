@@ -12,8 +12,8 @@ import net.smok.macrofactory.macros.Module;
 import java.util.Collection;
 
 public class ModulesList extends WidgetList<ModuleWrapper> {
-    public ModulesList(int x, int y, int w, int h, ParentElement parent) {
-        super(x, y, w, h, parent);
+    public ModulesList(int x, int y, int w, int h, int space, ParentElement parent) {
+        super(x, y, w, h, space, parent);
     }
 
     @Override

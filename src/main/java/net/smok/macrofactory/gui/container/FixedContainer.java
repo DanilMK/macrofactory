@@ -115,6 +115,13 @@ public class FixedContainer extends WidgetBase implements ParentContainer {
         return widget;
     }
 
+    public void clear() {
+        widgets.clear();
+        drawables.clear();
+        elements.clear();
+        nextPosition = 0;
+    }
+
     public int getSpace() {
         return space;
     }

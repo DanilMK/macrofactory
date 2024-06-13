@@ -1,4 +1,4 @@
-package net.smok.macrofactory.guiold;
+package net.smok.macrofactory.gui;
 
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.render.RenderUtils;
@@ -8,78 +8,69 @@ import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.gui.base.GuiIcon;
 
 public enum MacroIcons implements IGuiIcon, GuiIcon {
-    PLUS(0, 0, 20, 20),
-    MINUS(0, 20, 20, 20),
-    CONFIGURE(0, 40, 20, 20),
-    CONFIGURE_OFF(0, 40, 20, 20), // todo
-    ENABLED(0, 60, 20, 20),
-    ENABLED_OFF(0, 60, 20, 20), // todo
-    FOLDER(0, 80, 20, 20),
-    FOLDER_OFF(0, 80, 20, 20), // todo
-    FOLDER_ADD(0, 100, 20, 20),
-    FOLDER_REMOVE(0, 120, 20, 20),
-    MACRO_ADD(0, 140, 20, 20),
-    MACRO_REMOVE(0, 160, 20, 20),
-    MACRO_BUTTON(0, 180, 20, 20),
-    MACRO_EMPTY_ICON(100, 0, 20, 20),
-    MACRO_EMPTY_BUTTON(100, 40, 20, 20),
-    CHAT(0, 200, 20, 20),
-    CHAT_OFF(0, 200, 20, 20); // todo
+    MACRO_EMPTY_BUTTON(0, 0),
+    PLUS(0, 1),
+    MINUS(0, 2),
+    FOLDER_ADD(0, 3),
+    FOLDER_REMOVE(0, 4),
+    MACRO_ADD(0, 5),
+    MACRO_REMOVE(0, 6),
+    MACRO_BUTTON(0, 7),
+    CONFIGURE_OFF(3, 0), CONFIGURE(6, 0),
+    ENABLED_OFF(3, 1), ENABLED(6, 1),
+    FOLDER_OFF(3, 2), FOLDER(6, 2),
+    CHAT_OFF(3, 3), CHAT(6, 3),
+    MACRO_ICON(9, 0);
 
     public static final Identifier TEXTURE = new Identifier(MacroFactory.MOD_ID, "textures/icons.png");
+    private static final int SIZE = 20;
 
     private final int u;
     private final int v;
-    private final int w;
-    private final int h;
-    private final int hoverOffU;
 
-    MacroIcons(int u, int v, int w, int h) {
+    MacroIcons(int u, int v) {
         this.u = u;
         this.v = v;
-        this.w = w;
-        this.h = h;
-        hoverOffU = w;
     }
 
     @Override
     public int getWidth() {
-        return w;
+        return SIZE;
     }
 
     @Override
     public int getHeight() {
-        return h;
+        return SIZE;
     }
 
     @Override
     public int getU() {
-        return u;
+        return SIZE*u;
     }
 
     @Override
     public int getV() {
-        return v;
+        return SIZE*v;
     }
 
     public int renderU(boolean enabled, boolean selected) {
-        return this.u + (enabled ? selected ? hoverOffU * 2 : hoverOffU : 0);
+        return getU() + (enabled ? selected ? SIZE * 2 : SIZE : 0);
     }
 
     @Override
     public void renderAt(int x, int y, float zLevel, boolean enabled, boolean selected) {
 
         int u = renderU(enabled, selected);
-        int v = this.v;
+        int v = getV();
 
 
-        RenderUtils.drawTexturedRect(x, y, u, v, this.w, this.h, zLevel);
+        RenderUtils.drawTexturedRect(x, y, u, v, getWidth(), getHeight(), zLevel);
     }
 
     @Override
     public void renderAt(DrawContext context, int x, int y, boolean enabled, boolean selected) {
 
-        context.drawTexture(getTexture(), x, y, renderU(enabled, selected), v, w, h);
+        context.drawTexture(getTexture(), x, y, renderU(enabled, selected), getV(), getWidth(), getHeight());
     }
 
     @Override

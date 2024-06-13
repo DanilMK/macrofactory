@@ -14,7 +14,7 @@ import net.smok.macrofactory.guiold.GuiScreen;
 import net.smok.macrofactory.gui.ModulesScreen;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.Module;
-import net.smok.macrofactory.guiold.MacroIcons;
+import net.smok.macrofactory.gui.MacroIcons;
 
 import java.util.Collection;
 

@@ -1,9 +1,11 @@
 package net.smok.macrofactory.gui.config;
 
 import fi.dy.masa.malilib.config.IConfigBoolean;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.text.Text;
+import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.gui.base.ButtonBase;
 import net.smok.macrofactory.gui.base.GuiIcon;
 import org.jetbrains.annotations.NotNull;

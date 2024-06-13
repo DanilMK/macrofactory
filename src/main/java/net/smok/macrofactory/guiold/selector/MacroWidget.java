@@ -3,7 +3,7 @@ package net.smok.macrofactory.guiold.selector;
 import fi.dy.masa.malilib.gui.widgets.WidgetBase;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.smok.macrofactory.guiold.MacroIcons;
+import net.smok.macrofactory.gui.MacroIcons;
 import net.smok.macrofactory.macros.Macro;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public class MacroWidget extends WidgetBase {
     public MacroWidget(int x, int y, int width, int height, Macro macro) {
         super(x, y, width, height);
         this.macro = macro;
-        icon = new ItemIconWidget(x, y, width, height, macro.getIcon(), MacroIcons.MACRO_EMPTY_ICON);
+        icon = new ItemIconWidget(x, y, width, height, macro.getIcon(), MacroIcons.MACRO_ICON);
     }
 
 

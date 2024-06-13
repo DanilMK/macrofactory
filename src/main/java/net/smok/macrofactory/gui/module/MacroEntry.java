@@ -2,7 +2,7 @@ package net.smok.macrofactory.gui.module;
 
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.text.Text;
-import net.smok.macrofactory.guiold.MacroIcons;
+import net.smok.macrofactory.gui.MacroIcons;
 import net.smok.macrofactory.guiold.modules.ModuleWrapper;
 import net.smok.macrofactory.guiold.selector.ItemIconWidget;
 import net.smok.macrofactory.guiold.utils.ListEntryBox;
@@ -20,9 +20,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class MacroEntry extends WidgetListEntry<ModuleWrapper> {
 
-    private static final String BUTTON_MACRO_REMOVE = "guiold.button.macro_remove";
+    private static final String BUTTON_MACRO_REMOVE = "gui.button.macro_remove";
     private ButtonBase inChatButton;
     private ConfigStringWidget delayText;
+
     public MacroEntry(int x, int y, int w, int h, ModuleWrapper entry, @NotNull WidgetList<ModuleWrapper> parent) {
         super(x, y, w, h, entry, parent);
 
@@ -40,23 +41,9 @@ public class MacroEntry extends WidgetListEntry<ModuleWrapper> {
         topContainer.add(new ButtonBase(MacroIcons.MACRO_REMOVE, button -> {
             macro.getModule().remove(macro);
             parent.refreshPositions();
-        /*
-        widgetEntries.clear();
-        nextPosition = getEntryStartY();
-        MacroFactory.LOGGER.info("Refresh entries");
-
-        if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
-        else addFilteredContents(this::createWidgetEntry);*/
         })).setTooltip(Tooltip.of(Text.translatable(BUTTON_MACRO_REMOVE)));
         topContainer.add(new ConfigBooleanButton(MacroIcons.CONFIGURE, MacroIcons.CONFIGURE_OFF, macro.getIsConfigure(), button -> {
             parent.refreshPositions();
-        /*
-        widgetEntries.clear();
-        nextPosition = getEntryStartY();
-        MacroFactory.LOGGER.info("Refresh entries");
-
-        if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
-        else addFilteredContents(this::createWidgetEntry);*/
         }));
         topContainer.add(new ConfigKeybindButton(120, h, macro.getHotkey()));
 
@@ -90,7 +77,7 @@ public class MacroEntry extends WidgetListEntry<ModuleWrapper> {
             ButtonBase iconButton = downContainer.add(new ButtonBase(MacroIcons.MACRO_EMPTY_BUTTON, button -> macro.getIcon().setIconFromHand()));
             iconButton.setTooltip(Tooltip.of(Text.translatable(macro.getIcon().getComment())));
 
-            downContainer.addDrawable(new ItemIconWidget(iconButton.getX(), iconButton.getY(), iconButton.getWidth(), iconButton.getHeight(), macro.getIcon(), MacroIcons.MACRO_EMPTY_ICON));
+            downContainer.addDrawable(new ItemIconWidget(iconButton.getX(), iconButton.getY(), iconButton.getWidth(), iconButton.getHeight(), macro.getIcon(), MacroIcons.MACRO_ICON));
             downContainer.add(new ConfigOptionListButton(120, h, macro.getCallType(), button -> changeButtonsByCallType(macro)));
             downContainer.add(new ConfigOptionListButton(200, h, macro.getActionType(), button -> parent.refreshPositions()));
             delayText = downContainer.add(new ConfigStringWidget(40, h, macro.getDelayConfig(), 4));

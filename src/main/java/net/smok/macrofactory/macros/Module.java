@@ -20,14 +20,14 @@ import java.util.List;
 public class Module implements IKeybindProvider {
 
     private final ArrayList<Macro> macros = new ArrayList<>();
-    private final ConfigBoolean enabled = new ConfigBoolean("Enabled", true, "guiold.button.module_enabled");
+    private final ConfigBoolean enabled = new ConfigBoolean("Enabled", true, "gui.button.module_enabled");
     private final ConfigString name = new ConfigString("Name", "module.default.new", "config.comment.module_name");
     private final ConfigHotkey guiKeybind = new HotKeyWithCallBack("GuiKeybind", "",
             KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.BOTH, false, true, false, false),
             "config.comment.module_hotkey", this::openGui);
-    public final ConfigBoolean isOpen = new ConfigBoolean("OpenFolder", false, "guiold.button.module_open");
+    public final ConfigBoolean isOpen = new ConfigBoolean("OpenFolder", false, "gui.button.module_open");
     public boolean configure;
-    private final ConfigBoolean isConfigure = new ConfigBoolean("Configure", false, "guiold.button.module_configure");
+    private final ConfigBoolean isConfigure = new ConfigBoolean("Configure", false, "gui.button.module_configure");
 
 
     public Module() {}

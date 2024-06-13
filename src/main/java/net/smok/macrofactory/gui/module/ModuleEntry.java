@@ -3,7 +3,7 @@ package net.smok.macrofactory.gui.module;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.text.Text;
 import net.smok.macrofactory.Configs;
-import net.smok.macrofactory.guiold.MacroIcons;
+import net.smok.macrofactory.gui.MacroIcons;
 import net.smok.macrofactory.guiold.modules.ModuleWrapper;
 import net.smok.macrofactory.guiold.utils.ListEntryBox;
 import net.smok.macrofactory.gui.base.*;
@@ -19,8 +19,8 @@ import net.smok.macrofactory.macros.Module;
 public class ModuleEntry extends WidgetListEntry<ModuleWrapper> {
 
 
-    private static final String BUTTON_MACRO_ADD = "guiold.button.macro_add";
-    private static final String BUTTON_MODULE_REMOVE = "guiold.button.module_remove";
+    private static final String BUTTON_MACRO_ADD = "gui.button.macro_add";
+    private static final String BUTTON_MODULE_REMOVE = "gui.button.module_remove";
 
     public ModuleEntry(int x, int y, int w, int h, ModuleWrapper entry, WidgetList<ModuleWrapper> parent) {
         super(x, y, w, h, entry, parent);
@@ -36,23 +36,9 @@ public class ModuleEntry extends WidgetListEntry<ModuleWrapper> {
         container.add(new ButtonBase(MacroIcons.MACRO_ADD, button -> addNewMacro(module))).setTooltip(Tooltip.of(Text.translatable(BUTTON_MACRO_ADD)));
         container.add(new ConfigBooleanButton(MacroIcons.CONFIGURE, MacroIcons.CONFIGURE_OFF, module.getIsConfigure(), button -> {
             parent.refreshPositions();
-        /*
-        widgetEntries.clear();
-        nextPosition = getEntryStartY();
-        MacroFactory.LOGGER.info("Refresh entries");
-
-        if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
-        else addFilteredContents(this::createWidgetEntry);*/
         }));
         container.add(new ConfigBooleanButton(MacroIcons.ENABLED, MacroIcons.ENABLED_OFF, module.getEnabled(), button -> {
             parent.refreshPositions();
-        /*
-        widgetEntries.clear();
-        nextPosition = getEntryStartY();
-        MacroFactory.LOGGER.info("Refresh entries");
-
-        if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
-        else addFilteredContents(this::createWidgetEntry);*/
         }));
 
 
@@ -71,13 +57,6 @@ public class ModuleEntry extends WidgetListEntry<ModuleWrapper> {
 
         container.add(new ConfigBooleanButton(MacroIcons.FOLDER, MacroIcons.FOLDER_OFF, module.getIsOpen(), button -> {
             parent.refreshPositions();
-        /*
-        widgetEntries.clear();
-        nextPosition = getEntryStartY();
-        MacroFactory.LOGGER.info("Refresh entries");
-
-        if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
-        else addFilteredContents(this::createWidgetEntry);*/
         }));
 
 
