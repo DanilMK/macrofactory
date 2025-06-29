@@ -47,7 +47,7 @@ public abstract class GuiBase extends Screen implements DialogHandler {
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (isFocused()) {
             //noinspection DataFlowIssue
-            if (!getFocused().mouseReleased(mouseX, mouseY, button)) focusOn(null);
+            if (!getFocused().mouseReleased(mouseX, mouseY, button)) setFocused(null);
         }
         return super.mouseReleased(mouseX, mouseY, button);
     }

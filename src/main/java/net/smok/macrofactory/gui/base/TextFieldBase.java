@@ -85,7 +85,7 @@ public abstract class TextFieldBase extends ClickableWidget implements Drawable,
     }
 
     @Override
-    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         context.drawBorder(getX(), getY(), getWidth(), getHeight(), isMouseOver(mouseX, mouseY) ? 0xFF0A0A0A : 0xFF000000);
         textField.render(context, mouseX, mouseY, delta);
     }

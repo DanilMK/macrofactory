@@ -34,7 +34,7 @@ public class ItemIcon extends ConfigBase<ItemIcon> implements IConfigBase {
     @Override
     public void setValueFromJsonElement(JsonElement element) {
         JsonObject json = element.getAsJsonObject();
-        Item type = Registries.ITEM.get(new Identifier(json.get("Type").getAsString()));
+        Item type = Registries.ITEM.get(Identifier.of(json.get("Type").getAsString()));
         itemStack = type.getDefaultStack();
         itemStack.setDamage(json.get("Damage").getAsInt());
 
@@ -48,7 +48,7 @@ public class ItemIcon extends ConfigBase<ItemIcon> implements IConfigBase {
         json.addProperty("Type", itemStack.getItem().toString());
         json.addProperty("Damage", itemStack.getDamage());
 
-        if (!itemStack.hasNbt()) return json;
+        //if (!itemStack.hasNbt()) return json;
 
         // todo add nbt compound
         return json;

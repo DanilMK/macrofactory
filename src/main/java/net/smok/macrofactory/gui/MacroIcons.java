@@ -22,7 +22,7 @@ public enum MacroIcons implements IGuiIcon, GuiIcon {
     CHAT_OFF(3, 3), CHAT(6, 3),
     MACRO_ICON(9, 0);
 
-    public static final Identifier TEXTURE = new Identifier(MacroFactory.MOD_ID, "textures/icons.png");
+    public static final Identifier TEXTURE = Identifier.of(MacroFactory.MOD_ID, "textures/icons.png");
     private static final int SIZE = 20;
 
     private final int u;

@@ -41,9 +41,9 @@ public class ButtonBase extends ButtonWidget {
     }
 
     @Override
-    protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         if (icon != null) icon.renderAt(context, getX(), getY(), active, isSelected());
-        else super.renderButton(context, mouseX, mouseY, delta);
+        else super.renderWidget(context, mouseX, mouseY, delta);
     }
 
     @Override
