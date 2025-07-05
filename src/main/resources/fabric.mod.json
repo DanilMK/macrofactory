@@ -8,7 +8,9 @@
 		"Smok419"
 	],
 	"contact": {
-		"sources": "https://github.com/DanilMK/macrofactory"
+		"sources": "https://github.com/DanilMK/macrofactory",
+		"homepage": "https://modrinth.com/mod/macrofactory",
+		"issues": "https://github.com/DanilMK/macrofactory/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/macrofactory/icon.png",
