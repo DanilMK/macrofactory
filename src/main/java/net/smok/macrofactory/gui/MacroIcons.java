@@ -20,7 +20,7 @@ public enum MacroIcons implements IGuiIcon {
     MACRO_EMPTY_BUTTON(100, 40, 20, 20),
     CHAT(0, 200, 20, 20);
 
-    public static final Identifier TEXTURE = new Identifier(MacroFactory.MOD_ID, "textures/icons.png");
+    public static final Identifier TEXTURE = Identifier.of(MacroFactory.MOD_ID, "textures/icons.png");
 
     private final int u;
     private final int v;
