@@ -34,6 +34,28 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
     }
 
 
+    // Because Malilib can't draw panorama
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
+        renderBackground(context, mouseX, mouseY, partialTicks);
+        super.render(context, mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    protected void drawScreenBackground(DrawContext drawContext, int mouseX, int mouseY) {
+        // Remove extra fade
+    }
+
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        if (this.client.world == null) {
+            this.renderPanoramaBackground(context, delta);
+        }
+
+        this.applyBlur();
+        this.renderDarkening(context);
+    }
+
     // Copy code because I can't extend GuiConfigBase.class
     @Override
     protected int getBrowserWidth()
