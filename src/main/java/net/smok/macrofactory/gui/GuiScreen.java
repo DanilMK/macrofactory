@@ -50,7 +50,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (this.client.world == null) {
+        if (this.client != null && this.client.world == null) {
             this.renderPanoramaBackground(context, delta);
         }
 
