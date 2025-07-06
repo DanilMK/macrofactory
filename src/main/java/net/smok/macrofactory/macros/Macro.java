@@ -38,6 +38,9 @@ public class Macro {
     private boolean enable;
     private int cd;
 
+    public int getCd() {
+        return cd;
+    }
 
     public Macro(Module module) {
         this.module = module;

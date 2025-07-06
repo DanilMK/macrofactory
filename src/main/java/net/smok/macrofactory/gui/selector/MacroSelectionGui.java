@@ -99,6 +99,6 @@ public class MacroSelectionGui extends GuiBase {
     @Override
     public void close() {
         super.close();
-        if (selectedWidget != null) selectedWidget.callMacro(client);
+        if (client != null && selectedWidget != null) selectedWidget.callMacro(client);
     }
 }
