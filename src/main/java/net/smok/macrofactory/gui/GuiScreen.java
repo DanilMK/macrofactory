@@ -76,11 +76,6 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
         return this.dialogHandler;
     }
 
-    public void setDialogHandler(@Nullable IDialogHandler handler)
-    {
-        this.dialogHandler = handler;
-    }
-
     @Override
     @Nullable
     public IConfigInfoProvider getHoverInfoProvider()
