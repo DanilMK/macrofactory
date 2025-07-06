@@ -12,7 +12,7 @@ public enum PlayerKeybind implements IConfigOptionListEntry {
     JUMP(client -> client.options.jumpKey),
     USE(client -> client.options.useKey),
     ATTACK(client -> client.options.attackKey),
-    BACKWARD(client -> client.options.backKey),
+    BACK(client -> client.options.backKey),
     SNEAK(client -> client.options.sneakKey)
     ;
     private final Function<MinecraftClient, KeyBinding> keyBindingGetter;
@@ -57,8 +57,8 @@ public enum PlayerKeybind implements IConfigOptionListEntry {
     private static PlayerKeybind cycleForward(PlayerKeybind keybind) {
         return switch (keybind) {
 
-            case FORWARD -> BACKWARD;
-            case BACKWARD -> SNEAK;
+            case FORWARD -> BACK;
+            case BACK -> SNEAK;
             case SNEAK -> JUMP;
             case JUMP -> USE;
             case USE -> ATTACK;
@@ -69,8 +69,8 @@ public enum PlayerKeybind implements IConfigOptionListEntry {
         return switch (keybind) {
 
             case FORWARD -> ATTACK;
-            case BACKWARD -> FORWARD;
-            case SNEAK -> BACKWARD;
+            case BACK -> FORWARD;
+            case SNEAK -> BACK;
             case JUMP -> SNEAK;
             case USE -> JUMP;
             case ATTACK -> USE;
