@@ -105,6 +105,10 @@ public class Macro {
         return icon;
     }
 
+    public int getCd() {
+        return cd;
+    }
+
     @NotNull
     public String getSelectName() {
         if (!name.getStringValue().isEmpty()) return name.getStringValue();

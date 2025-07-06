@@ -5,29 +5,33 @@ import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 
+import java.util.function.Function;
+
 public enum PlayerKeybind implements IConfigOptionListEntry {
-    FORWARD, JUMP, USE, ATTACK;
-    private static boolean initialized;
+    FORWARD(client -> client.options.forwardKey),
+    JUMP(client -> client.options.jumpKey),
+    USE(client -> client.options.useKey),
+    ATTACK(client -> client.options.attackKey),
+    BACKWARD(client -> client.options.backKey),
+    SNEAK(client -> client.options.sneakKey)
+    ;
+    private final Function<MinecraftClient, KeyBinding> keyBindingGetter;
 
-    private KeyBinding keyBinding;
-
-    public static void init(MinecraftClient client) {
-        FORWARD.keyBinding = (client.options.forwardKey);
-        USE.keyBinding = (client.options.useKey);
-        ATTACK.keyBinding = (client.options.attackKey);
-        JUMP.keyBinding = (client.options.jumpKey);
-        initialized = true;
+    PlayerKeybind(Function<MinecraftClient, KeyBinding> keyBindingGetter) {
+        this.keyBindingGetter = keyBindingGetter;
     }
 
-    public void setPressed(boolean pressed) {
-        if (initialized) keyBinding.setPressed(pressed);
+
+    public void setPressed(MinecraftClient client, boolean pressed) {
+        keyBindingGetter.apply(client).setPressed(pressed);
     }
 
-    public boolean isPressed() {
-        return initialized && keyBinding.isPressed();
+    public boolean isPressed(MinecraftClient client) {
+        return keyBindingGetter.apply(client).isPressed();
     }
-    public boolean wasPressed() {
-        return initialized && keyBinding.wasPressed();
+
+    public boolean wasPressed(MinecraftClient client) {
+        return keyBindingGetter.apply(client).wasPressed();
     }
 
     @Override
@@ -53,7 +57,9 @@ public enum PlayerKeybind implements IConfigOptionListEntry {
     private static PlayerKeybind cycleForward(PlayerKeybind keybind) {
         return switch (keybind) {
 
-            case FORWARD -> JUMP;
+            case FORWARD -> BACKWARD;
+            case BACKWARD -> SNEAK;
+            case SNEAK -> JUMP;
             case JUMP -> USE;
             case USE -> ATTACK;
             case ATTACK -> FORWARD;
@@ -63,7 +69,9 @@ public enum PlayerKeybind implements IConfigOptionListEntry {
         return switch (keybind) {
 
             case FORWARD -> ATTACK;
-            case JUMP -> FORWARD;
+            case BACKWARD -> FORWARD;
+            case SNEAK -> BACKWARD;
+            case JUMP -> SNEAK;
             case USE -> JUMP;
             case ATTACK -> USE;
         };
