@@ -44,7 +44,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
     }
 
     @Override
-    protected void drawScreenBackground(DrawContext drawContext, int mouseX, int mouseY) {
+    protected void drawScreenBackground(int mouseX, int mouseY) {
         // Remove extra fade
     }
 
@@ -54,7 +54,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
             this.renderPanoramaBackground(context, delta);
         }
 
-        this.applyBlur();
+        this.applyBlur(delta);
         this.renderDarkening(context);
     }
 
