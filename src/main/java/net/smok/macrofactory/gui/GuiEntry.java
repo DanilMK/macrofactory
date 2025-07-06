@@ -10,7 +10,6 @@ import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
 import fi.dy.masa.malilib.gui.widgets.*;
 import fi.dy.masa.malilib.gui.wrappers.TextFieldWrapper;
 import fi.dy.masa.malilib.hotkeys.IHotkey;
-import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.KeyCodes;
 import net.minecraft.client.gui.DrawContext;
 import net.smok.macrofactory.gui.utils.TextFieldListener;
@@ -18,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
 
@@ -235,13 +233,14 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected, DrawContext drawContext)
+    public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected)
     {
-        RenderUtils.color(1f, 1f, 1f, 1f);
+        //RenderUtils.color(1f, 1f, 1f, 1f);
 
-        for (TextFieldWrapper<?> textField : textFields)
+        for (TextFieldWrapper<?> textField : textFields) {
             textField.getTextField().render(drawContext, mouseX, mouseY, 0f);
+        }
 
-        super.render(mouseX, mouseY, selected, drawContext);
+        super.render( drawContext, mouseX, mouseY, selected);
     }
 }

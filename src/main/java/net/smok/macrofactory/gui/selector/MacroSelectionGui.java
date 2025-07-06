@@ -89,7 +89,7 @@ public class MacroSelectionGui extends GuiBase {
         }
 
         for (MacroWidget widget : macroWidgets) {
-            widget.render(mouseX, mouseY, widget == selectedWidget, drawContext);
+            widget.render(drawContext, mouseX, mouseY, widget == selectedWidget);
             if (mouseIsMove && widget.isMouseOver(mouseX, mouseY)) selectedWidget = widget;
         }
         lastMouseX = mouseX;

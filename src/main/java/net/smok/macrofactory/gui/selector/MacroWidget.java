@@ -21,10 +21,10 @@ public class MacroWidget extends WidgetBase {
 
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected, DrawContext drawContext) {
+    public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected) {
         drawContext.drawBorder(x, y, width, height, selected ? 0xE0FAFAFA : 0xE0020202);
 
-        icon.render(mouseX, mouseY, selected, drawContext);
+        icon.render(drawContext, mouseX, mouseY, selected);
     }
     @NotNull
     public String getSelectName() {

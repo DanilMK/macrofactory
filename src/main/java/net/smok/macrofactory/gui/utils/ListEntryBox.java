@@ -14,7 +14,7 @@ public class ListEntryBox extends WidgetBase {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected, DrawContext drawContext) {
+    public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected) {
         if (hasVertical) drawContext.drawVerticalLine(x, y, y + height, GuiBase.COLOR_HORIZONTAL_BAR);
         if (hasHorizontal) drawContext.drawHorizontalLine(x, x + width, y, GuiBase.COLOR_HORIZONTAL_BAR);
     }

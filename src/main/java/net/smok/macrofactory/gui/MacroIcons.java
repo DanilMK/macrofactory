@@ -60,7 +60,7 @@ public enum MacroIcons implements IGuiIcon {
     }
 
     @Override
-    public void renderAt(int x, int y, float zLevel, boolean enabled, boolean selected, DrawContext drawContext) {
+    public void renderAt(DrawContext drawContext, int x, int y, float zLevel, boolean enabled, boolean selected) {
 
         int u = this.u;
         int v = this.v;
@@ -78,7 +78,7 @@ public enum MacroIcons implements IGuiIcon {
         }
 
 
-        RenderUtils.drawTexturedRectAndDraw(TEXTURE, x, y, u, v, this.w, this.h, zLevel, drawContext);
+        RenderUtils.drawTexturedRect(drawContext, TEXTURE, x, y, u, v, this.w, this.h, zLevel);
     }
 
 

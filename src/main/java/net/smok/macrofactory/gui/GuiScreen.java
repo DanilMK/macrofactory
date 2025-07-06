@@ -9,8 +9,6 @@ import fi.dy.masa.malilib.gui.button.ConfigButtonKeybind;
 import fi.dy.masa.malilib.gui.interfaces.IConfigInfoProvider;
 import fi.dy.masa.malilib.gui.interfaces.IDialogHandler;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
-import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
-import fi.dy.masa.malilib.gui.widgets.WidgetListEntryBase;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.KeyCodes;
 import fi.dy.masa.malilib.util.StringUtils;
@@ -36,13 +34,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
     }
 
 
-    // Because Malilib can't draw panorama
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(context, mouseX, mouseY, partialTicks);
-        super.render(context, mouseX, mouseY, partialTicks);
-    }
-
+    // Override background for render panorama
     @Override
     protected void drawScreenBackground(DrawContext drawContext, int mouseX, int mouseY) {
         // Remove extra fade
@@ -50,11 +42,11 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (this.client.world == null) {
+        if (this.client != null && this.client.world == null) {
             this.renderPanoramaBackground(context, delta);
         }
 
-        this.applyBlur();
+        this.applyBlur(context);
         this.renderDarkening(context);
     }
 
@@ -78,10 +70,6 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
         return this.dialogHandler;
     }
 
-    public void setDialogHandler(@Nullable IDialogHandler handler)
-    {
-        this.dialogHandler = handler;
-    }
 
     @Override
     @Nullable
