@@ -25,7 +25,7 @@ public class ItemIconWidget extends WidgetBase {
             itemIcon.drawIcon(drawContext, x, y, width, height);
         } else {
             bindTexture(defaultIcon.getTexture());
-            defaultIcon.renderAt(x, y, 0, false, false);
+            defaultIcon.renderAt(x, y, 0, false, false, drawContext);
         }
     }
 
