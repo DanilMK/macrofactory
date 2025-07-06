@@ -14,7 +14,9 @@ import fi.dy.masa.malilib.gui.widgets.WidgetListEntryBase;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.KeyCodes;
 import fi.dy.masa.malilib.util.StringUtils;
+import net.minecraft.client.gui.DrawContext;
 import net.smok.macrofactory.MacroFactory;
+import net.smok.macrofactory.ModulesKeybindProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -88,15 +90,14 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
         return this.hoverInfoProvider;
     }
 
+    // Apply settings
     @Override
-    public void removed()
-    {/*
-        if (this.getListWidget().wereConfigsModified())
-        {
-            this.getListWidget().applyPendingModifications();
-            this.onSettingsChanged();
-            this.getListWidget().clearConfigsModifiedFlag();
-        }*/
+    protected void closeGui(boolean showParent) {
+        super.closeGui(showParent);
+
+
+        onSettingsChanged();
+        ModulesKeybindProvider.update();
     }
 
     protected void onSettingsChanged()
@@ -117,6 +118,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
         }
         else
         {
+            //noinspection DataFlowIssue
             if (this.getListWidget().onKeyTyped(keyCode, scanCode, modifiers))
             {
                 return true;
@@ -141,6 +143,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
             return true;
         }
 
+        //noinspection DataFlowIssue
         if (this.getListWidget().onCharTyped(charIn, modifiers))
         {
             return true;
