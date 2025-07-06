@@ -19,7 +19,6 @@ public class MacroFactory implements ModInitializer {
 	public void onInitialize() {
 
 		LOGGER.info("Initialize Macro Factory");
-		ClientLifecycleEvents.CLIENT_STARTED.register(this::clientStart);
 		ClientTickEvents.END_CLIENT_TICK.register(new TickLoop());
 		InputEventHandler.getKeybindManager().registerKeybindProvider(ModulesKeybindProvider.INSTANCE);
 
@@ -27,7 +26,4 @@ public class MacroFactory implements ModInitializer {
 		ConfigManager.getInstance().registerConfigHandler(MOD_ID, Configs.INSTANCE);
 	}
 
-	private void clientStart(MinecraftClient client) {
-		PlayerKeybind.init(client);
-	}
 }

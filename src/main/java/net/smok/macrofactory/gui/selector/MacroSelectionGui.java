@@ -2,6 +2,7 @@ package net.smok.macrofactory.gui.selector;
 
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.util.StringUtils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.smok.macrofactory.gui.PositionAlignment;
 import net.smok.macrofactory.gui.Rect;
@@ -99,6 +100,6 @@ public class MacroSelectionGui extends GuiBase {
     @Override
     public void close() {
         super.close();
-        if (selectedWidget != null) selectedWidget.callMacro(client);
+        if (client != null && selectedWidget != null) selectedWidget.callMacro(client);
     }
 }
