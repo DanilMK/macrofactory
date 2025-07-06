@@ -24,7 +24,7 @@ public class ItemIconWidget extends WidgetBase {
         if (itemIcon.isModified()) {
             itemIcon.drawIcon(drawContext, x, y, width, height);
         } else {
-            bindTexture(defaultIcon.getTexture());
+            //bindTexture(defaultIcon.getTexture(), drawContext);
             defaultIcon.renderAt(x, y, 0, false, false, drawContext);
         }
     }

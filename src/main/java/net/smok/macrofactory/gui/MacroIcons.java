@@ -78,7 +78,7 @@ public enum MacroIcons implements IGuiIcon {
         }
 
 
-        RenderUtils.drawTexturedRect(x, y, u, v, this.w, this.h, zLevel);
+        RenderUtils.drawTexturedRectAndDraw(TEXTURE, x, y, u, v, this.w, this.h, zLevel, drawContext);
     }
 
 

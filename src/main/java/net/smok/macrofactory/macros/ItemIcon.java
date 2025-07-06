@@ -63,7 +63,7 @@ public class ItemIcon extends ConfigBase<ItemIcon> implements IConfigBase {
         if (mouseButton != 0) return;
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
-        setItemStack(client.player.getInventory().getMainHandStack());
+        setItemStack(client.player.getInventory().getSelectedStack());
 
     }
 
