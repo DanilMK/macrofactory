@@ -1,23 +1,15 @@
 package net.smok.macrofactory.gui.modules;
 
 import com.google.common.collect.ImmutableList;
-import fi.dy.masa.malilib.gui.GuiBase;
-import fi.dy.masa.malilib.gui.GuiDialogBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.ConfigButtonKeybind;
-import fi.dy.masa.malilib.gui.interfaces.IDialogHandler;
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.gui.widgets.WidgetHoverInfo;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.smok.macrofactory.Configs;
-import net.smok.macrofactory.ModulesKeybindProvider;
-import net.smok.macrofactory.gui.GuiEntry;
-import net.smok.macrofactory.gui.GuiList;
-import net.smok.macrofactory.gui.GuiScreen;
+import net.smok.macrofactory.gui.*;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.Module;
-import net.smok.macrofactory.gui.MacroIcons;
 
 import java.util.Collection;
 
@@ -55,6 +47,10 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
                 Configs.Generic.CMD_MACRO_OPEN.getKeybind(), this));
         addWidget(new WidgetHoverInfo(keybindX, keybindY, keybindWidth, keybindHeight, Configs.Generic.CMD_MACRO_OPEN.getComment()));
 
+        addWidget(new ButtonGenericWithoutScroll(getBrowserWidth() / 2 - 100, getBrowserHeight() + 40, 200, false, "gui.done")
+                .setActionListener((button, mouseButton) -> {
+                    if (mouseButton == 0) closeGui(true);
+                }));
 
     }
 
@@ -91,18 +87,5 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
         };
     }
 
-    @Override
-    protected void closeGui(boolean showParent) {
-        super.closeGui(showParent);
 
-
-        ModulesKeybindProvider.update();
-    }
-
-
-    /*
-    @Override
-    protected int getBrowserWidth() {
-        return Math.min(super.getBrowserWidth(), 1000);
-    }*/
 }
