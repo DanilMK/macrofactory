@@ -1,6 +1,7 @@
 package net.smok.macrofactory.gui.selector;
 
 import fi.dy.masa.malilib.gui.GuiBase;
+import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.smok.macrofactory.gui.PositionAlignment;
@@ -89,7 +90,7 @@ public class MacroSelectionGui extends GuiBase {
         }
 
         for (MacroWidget widget : macroWidgets) {
-            widget.render(drawContext, mouseX, mouseY, widget == selectedWidget);
+            widget.render(GuiContext.fromGuiGraphics(drawContext), mouseX, mouseY, widget == selectedWidget);
             if (mouseIsMove && widget.isMouseOver(mouseX, mouseY)) selectedWidget = widget;
         }
         lastMouseX = mouseX;

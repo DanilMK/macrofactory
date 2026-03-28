@@ -1,8 +1,8 @@
 package net.smok.macrofactory.gui.selector;
 
 import fi.dy.masa.malilib.gui.widgets.WidgetBase;
+import fi.dy.masa.malilib.render.GuiContext;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.smok.macrofactory.gui.MacroIcons;
 import net.smok.macrofactory.macros.Macro;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ public class MacroWidget extends WidgetBase {
 
 
     @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected) {
+    public void render(GuiContext drawContext, int mouseX, int mouseY, boolean selected) {
         int color = selected ? 0xE0FAFAFA : 0xE0020202;
         drawContext.drawVerticalLine(x, y, y + height, color);
         drawContext.drawVerticalLine(x + width, y, y + height, color);

@@ -2,6 +2,7 @@ package net.smok.macrofactory.gui.utils;
 
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.widgets.WidgetBase;
+import fi.dy.masa.malilib.render.GuiContext;
 import net.minecraft.client.gui.DrawContext;
 
 public class ListEntryBox extends WidgetBase {
@@ -14,7 +15,7 @@ public class ListEntryBox extends WidgetBase {
     }
 
     @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected) {
+    public void render(GuiContext drawContext, int mouseX, int mouseY, boolean selected) {
         if (hasVertical) drawContext.drawVerticalLine(x, y, y + height, GuiBase.COLOR_HORIZONTAL_BAR);
         if (hasHorizontal) drawContext.drawHorizontalLine(x, x + width, y, GuiBase.COLOR_HORIZONTAL_BAR);
     }

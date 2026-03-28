@@ -1,8 +1,8 @@
 package net.smok.macrofactory.gui;
 
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
+import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.render.RenderUtils;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.smok.macrofactory.MacroFactory;
 
@@ -59,8 +59,9 @@ public enum MacroIcons implements IGuiIcon {
         return v;
     }
 
+
     @Override
-    public void renderAt(DrawContext drawContext, int x, int y, float zLevel, boolean enabled, boolean selected) {
+    public void renderAt(GuiContext drawContext, int x, int y, float zLevel, boolean enabled, boolean selected) {
 
         int u = this.u;
         int v = this.v;

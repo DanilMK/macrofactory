@@ -2,7 +2,7 @@ package net.smok.macrofactory.gui.selector;
 
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.gui.widgets.WidgetBase;
-import net.minecraft.client.gui.DrawContext;
+import fi.dy.masa.malilib.render.GuiContext;
 import net.smok.macrofactory.macros.ItemIcon;
 
 public class ItemIconWidget extends WidgetBase {
@@ -18,7 +18,7 @@ public class ItemIconWidget extends WidgetBase {
 
 
     @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected) {
+    public void render(GuiContext drawContext, int mouseX, int mouseY, boolean selected) {
         int color = selected ? 0xE0FAFAFA : 0xE0020202;
         drawContext.drawVerticalLine(x, y, y + height, color);
         drawContext.drawVerticalLine(x + width, y, y + height, color);

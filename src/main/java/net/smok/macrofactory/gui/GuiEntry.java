@@ -10,9 +10,9 @@ import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
 import fi.dy.masa.malilib.gui.widgets.*;
 import fi.dy.masa.malilib.gui.wrappers.TextFieldWrapper;
 import fi.dy.masa.malilib.hotkeys.IHotkey;
+import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.util.KeyCodes;
 import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.input.CharInput;
 import net.minecraft.client.input.KeyInput;
 import net.smok.macrofactory.gui.utils.TextFieldListener;
@@ -162,7 +162,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     {
         // Check if any TextField don't is not last applied value
         for (TextFieldWrapper<?> textField : textFields) {
-            if (!textField.getTextField().getText().equals(this.lastAppliedValue))
+            if (!textField.textField().getText().equals(this.lastAppliedValue))
                 return true;
         }
 
@@ -172,7 +172,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     public void applyNewValueToConfig() {
         for (TextFieldWrapper<?> textField : textFields) {
             textField.onGuiClosed();
-            lastAppliedValue = textField.getTextField().getText();
+            lastAppliedValue = textField.textField().getText();
         }
     }
 
@@ -192,7 +192,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
 
         // Focus to any TextField
         for (TextFieldWrapper<?> textField : textFields)
-            ret |= textField.getTextField().mouseClicked(click, doubleClick);
+            ret |= textField.textField().mouseClicked(click, doubleClick);
 
         // Click to any sub widget
         if (!this.subWidgets.isEmpty())
@@ -211,7 +211,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
 
                 // Apply value for each focused field
                 textField.onGuiClosed();
-                lastAppliedValue = textField.getTextField().getText();
+                lastAppliedValue = textField.textField().getText();
                 return true;
 
             } else {
@@ -232,16 +232,12 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
         return super.onCharTypedImpl(input);
     }
 
-
     @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected)
-    {
-        //RenderUtils.color(1f, 1f, 1f, 1f);
-
+    public void render(GuiContext drawContext, int mouseX, int mouseY, boolean selected) {
         for (TextFieldWrapper<?> textField : textFields) {
-            textField.getTextField().render(drawContext, mouseX, mouseY, 0f);
+            textField.textField().render(drawContext, mouseX, mouseY, 0f);
         }
-
-        super.render( drawContext, mouseX, mouseY, selected);
+        super.render(drawContext, mouseX, mouseY, selected);
     }
+
 }

@@ -9,6 +9,7 @@ import fi.dy.masa.malilib.gui.button.ConfigButtonKeybind;
 import fi.dy.masa.malilib.gui.interfaces.IConfigInfoProvider;
 import fi.dy.masa.malilib.gui.interfaces.IDialogHandler;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
+import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.KeyCodes;
 import fi.dy.masa.malilib.util.StringUtils;
@@ -36,12 +37,11 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
         this.title = StringUtils.translate(titleKey, args);
     }
 
-
-    // Override background for render panorama
     @Override
-    protected void drawScreenBackground(DrawContext drawContext, int mouseX, int mouseY) {
-        // Remove extra fade
+    protected void drawScreenBackground(GuiContext ctx, int mouseX, int mouseY) {
+        super.drawScreenBackground(ctx, mouseX, mouseY);
     }
+
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
