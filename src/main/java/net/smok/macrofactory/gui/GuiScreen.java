@@ -12,7 +12,10 @@ import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.KeyCodes;
 import fi.dy.masa.malilib.util.StringUtils;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.ModulesKeybindProvider;
 import org.jetbrains.annotations.Nullable;
@@ -97,22 +100,21 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
     }
 
     @Override
-    public boolean onKeyTyped(int keyCode, int scanCode, int modifiers)
-    {
+    public boolean onKeyTyped(KeyInput input) {
         if (this.activeKeybindButton != null)
         {
-            this.activeKeybindButton.onKeyPressed(keyCode);
+            this.activeKeybindButton.onKeyPressed(input.key());
             return true;
         }
         else
         {
             //noinspection DataFlowIssue
-            if (this.getListWidget().onKeyTyped(keyCode, scanCode, modifiers))
+            if (this.getListWidget().onKeyTyped(input))
             {
                 return true;
             }
 
-            if (keyCode == KeyCodes.KEY_ESCAPE && this.getParent() != GuiUtils.getCurrentScreen())
+            if (input.key() == KeyCodes.KEY_ESCAPE && this.getParent() != GuiUtils.getCurrentScreen())
             {
                 this.closeGui(true);
                 return true;
@@ -123,8 +125,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
     }
 
     @Override
-    public boolean onCharTyped(char charIn, int modifiers)
-    {
+    public boolean onCharTyped(CharInput input) {
         if (this.activeKeybindButton != null)
         {
             // Prevents the chars leaking into the search box, if we didn't pretend to handle them here
@@ -132,18 +133,17 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
         }
 
         //noinspection DataFlowIssue
-        if (this.getListWidget().onCharTyped(charIn, modifiers))
+        if (this.getListWidget().onCharTyped(input))
         {
             return true;
         }
 
-        return super.onCharTyped(charIn, modifiers);
+        return super.onCharTyped(input);
     }
 
     @Override
-    public boolean onMouseClicked(int mouseX, int mouseY, int mouseButton)
-    {
-        if (super.onMouseClicked(mouseX, mouseY, mouseButton))
+    public boolean onMouseClicked(Click click, boolean doubleClick) {
+        if (super.onMouseClicked(click, doubleClick))
         {
             return true;
         }
@@ -158,6 +158,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
 
         return false;
     }
+
 
     @Override
     public String getModId() {

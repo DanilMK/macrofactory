@@ -64,7 +64,7 @@ public class CommandAction implements MacroAction {
         ClientPlayerEntity player = client.player;
         if (player == null || loop == Loop.OFF_TICK || loop == Loop.END) return;
 
-        if (inChat.getBooleanValue()) GuiBase.openGui(new ChatScreen(substringValue()));
+        if (inChat.getBooleanValue()) GuiBase.openGui(new ChatScreen(substringValue(), false));
         else sendMessageOrCommand(player, substringValue());
     }
 

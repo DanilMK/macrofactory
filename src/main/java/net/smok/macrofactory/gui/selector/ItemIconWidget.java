@@ -19,7 +19,12 @@ public class ItemIconWidget extends WidgetBase {
 
     @Override
     public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected) {
-        drawContext.drawBorder(x, y, width, height, selected ? 0xE0FAFAFA : 0xE0020202);
+        int color = selected ? 0xE0FAFAFA : 0xE0020202;
+        drawContext.drawVerticalLine(x, y, y + height, color);
+        drawContext.drawVerticalLine(x + width, y, y + height, color);
+        drawContext.drawHorizontalLine(x, x + width, y, color);
+        drawContext.drawHorizontalLine(x, x + width, y + height, color);
+
 
         if (itemIcon.isModified()) {
             itemIcon.drawIcon(drawContext, x, y, width, height);

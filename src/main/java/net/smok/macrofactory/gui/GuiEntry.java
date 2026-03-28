@@ -11,7 +11,10 @@ import fi.dy.masa.malilib.gui.widgets.*;
 import fi.dy.masa.malilib.gui.wrappers.TextFieldWrapper;
 import fi.dy.masa.malilib.hotkeys.IHotkey;
 import fi.dy.masa.malilib.util.KeyCodes;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.smok.macrofactory.gui.utils.TextFieldListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -184,29 +187,27 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     }
 
     @Override
-    protected boolean onMouseClickedImpl(int mouseX, int mouseY, int mouseButton)
-    {
+    protected boolean onMouseClickedImpl(Click click, boolean doubleClick) {
         boolean ret = false;
 
         // Focus to any TextField
         for (TextFieldWrapper<?> textField : textFields)
-            ret |= textField.getTextField().mouseClicked(mouseX, mouseY, mouseButton);
+            ret |= textField.getTextField().mouseClicked(click, doubleClick);
 
         // Click to any sub widget
         if (!this.subWidgets.isEmpty())
             for (WidgetBase widget : this.subWidgets)
-                ret |= widget.isMouseOver(mouseX, mouseY) && widget.onMouseClicked(mouseX, mouseY, mouseButton);
+                ret |= widget.isMouseOver((int) click.x(), (int) click.y()) && widget.onMouseClicked(click, doubleClick);
 
         return ret;
     }
 
     @Override
-    public boolean onKeyTypedImpl(int keyCode, int scanCode, int modifiers)
-    {
+    public boolean onKeyTypedImpl(KeyInput input) {
         for (TextFieldWrapper<?> textField : textFields) {
             if (!textField.isFocused()) continue;
 
-            if (keyCode == KeyCodes.KEY_ENTER) {
+            if (input.key() == KeyCodes.KEY_ENTER) {
 
                 // Apply value for each focused field
                 textField.onGuiClosed();
@@ -215,7 +216,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
 
             } else {
                 // KeyType for each focused field
-                return textField.onKeyTyped(keyCode, scanCode, modifiers);
+                return textField.onKeyTyped(input);
             }
         }
 
@@ -223,14 +224,14 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     }
 
     @Override
-    protected boolean onCharTypedImpl(char charIn, int modifiers)
-    {
+    protected boolean onCharTypedImpl(CharInput input) {
         // CharType for each field
         for (TextFieldWrapper<?> textField : textFields)
-            if (textField.onCharTyped(charIn, modifiers)) return true;
+            if (textField.onCharTyped(input)) return true;
 
-        return super.onCharTypedImpl(charIn, modifiers);
+        return super.onCharTypedImpl(input);
     }
+
 
     @Override
     public void render(DrawContext drawContext, int mouseX, int mouseY, boolean selected)

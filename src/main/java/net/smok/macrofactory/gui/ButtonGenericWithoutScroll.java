@@ -8,8 +8,4 @@ public class ButtonGenericWithoutScroll extends ButtonGeneric {
         super(x, y, width, rightAlign, translationKey, args);
     }
 
-    @Override
-    public boolean onMouseScrolledImpl(int mouseX, int mouseY, double horizontalAmount, double verticalAmount) {
-        return true;
-    }
 }

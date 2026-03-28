@@ -14,6 +14,9 @@ repositories {
     maven { url 'https://masa.dy.fi/maven' }
     maven { url 'https://maven.terraformersmc.com/releases/' }
 	maven { url 'https://jitpack.io' }
+	maven { url = 'https://maven.fallenbreath.me/releases'
+		content {includeGroupAndSubgroups("me.fallenbreath") }
+	}
 }
 
 dependencies {
@@ -30,7 +33,8 @@ dependencies {
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	
-    modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
+    modImplementation "com.github.sakura-ryoko:malilib:${minecraft_version}-${malilib_version}"
+
     modCompileOnly "com.terraformersmc:modmenu:${project.mod_menu_version}"
 }
 

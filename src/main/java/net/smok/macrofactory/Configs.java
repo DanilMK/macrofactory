@@ -13,7 +13,6 @@ import fi.dy.masa.malilib.hotkeys.IKeybindProvider;
 import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.smok.macrofactory.gui.ConfigsGui;
 import net.smok.macrofactory.gui.modules.ModulesGui;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.Module;
@@ -29,6 +28,9 @@ public class Configs implements IConfigHandler, IKeybindProvider {
     public static final Configs INSTANCE = new Configs();
     private static final String CONFIG_FILE_NAME = MacroFactory.MOD_ID + ".json";
     private static final String MACRO_DIR = MacroFactory.MOD_ID + "_macros";
+    private static final File CONFIG_FILE = FileUtils.getConfigDirectoryAsPath().resolve(CONFIG_FILE_NAME).toFile();
+    private static final File MACRO_DIRECTORY = FileUtils.getConfigDirectoryAsPath().resolve(MACRO_DIR).toFile();
+
 
     @Override
     public void addKeysToMap(IKeybindManager manager) {
@@ -81,7 +83,7 @@ public class Configs implements IConfigHandler, IKeybindProvider {
     }
 
     private static void readGeneric() {
-        File configFile = new File(FileUtils.getConfigDirectory(), CONFIG_FILE_NAME);
+        File configFile = CONFIG_FILE;
 
         if (!configFile.exists() || !configFile.isFile() || !configFile.canRead()) return;
         JsonElement element = JsonUtils.parseJsonFile(configFile);
@@ -99,10 +101,9 @@ public class Configs implements IConfigHandler, IKeybindProvider {
     }
 
     private static void readMacros() {
-        File macrosDir = new File(FileUtils.getConfigDirectory(), MACRO_DIR);
-        if (!macrosDir.exists() || !macrosDir.isDirectory()) return;
+        if (!MACRO_DIRECTORY.exists() || !MACRO_DIRECTORY.isDirectory()) return;
 
-        File[] files = macrosDir.listFiles(pathname -> pathname.getName().endsWith(".json"));
+        File[] files = MACRO_DIRECTORY.listFiles(pathname -> pathname.getName().endsWith(".json"));
         if (files == null) return;
         List<Module> modules = new ArrayList<>();
 
@@ -128,7 +129,7 @@ public class Configs implements IConfigHandler, IKeybindProvider {
 
     @Override
     public void save() {
-        File dir = FileUtils.getConfigDirectory();
+        File dir = FileUtils.getConfigDirectoryAsPath().toFile();
 
         writeGeneric(dir);
 
