@@ -13,6 +13,8 @@ import net.smok.macrofactory.macros.Module;
 
 public class ModulesScreen extends GuiBase {
 
+    private final Screen parentScreen;
+
     public static final ConfigHotkey SCREEN_OPEN_KEY = new HotKeyWithCallBack("cmdMacroOpen", "Y", "Menu Open", (action, key) -> {
         fi.dy.masa.malilib.gui.GuiBase.openGui(new  ModulesScreen());
         return true;
@@ -20,25 +22,13 @@ public class ModulesScreen extends GuiBase {
 
     public ModulesScreen() {
         super(Text.translatable("gui.title.screen_module"));
+        parentScreen = null;
     }
 
     public ModulesScreen(Screen parent) {
-        super(Text.of("Modules"));
+        super(Text.translatable("gui.title.screen_module"));
+        parentScreen = parent;
     }
-
-
-    /*
-
-        *BOOLEAN,
-        *INTEGER,
-        *DOUBLE,
-        COLOR, todo
-        *STRING,
-        STRING_LIST, todo
-        COLOR_LIST, todo
-        *OPTION_LIST,
-        *HOTKEY;
-     */
 
 
     @Override
@@ -64,5 +54,6 @@ public class ModulesScreen extends GuiBase {
     public void close() {
         super.close();
         ModulesKeybindProvider.update();
+        client.setScreen(parentScreen);
     }
 }

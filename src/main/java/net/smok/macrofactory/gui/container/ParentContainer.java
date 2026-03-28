@@ -68,7 +68,7 @@ public interface ParentContainer extends ParentElement, Drawable, Selectable {
 
     @Override
     default void setFocused(boolean focused) {
-        if (!focused) setFocused(null);
+        if (!focused) focusOn(null);
     }
 
 
@@ -77,12 +77,12 @@ public interface ParentContainer extends ParentElement, Drawable, Selectable {
         if (isFocused()) {
             //noinspection DataFlowIssue
             if (getFocused().mouseClicked(mouseX, mouseY, button)) return true;
-            else setFocused(null);
+            else focusOn(null);
         }
 
         for (Element child : children()) {
             if (child.mouseClicked(mouseX, mouseY, button)) {
-                setFocused(child);
+                focusOn(child);
                 if (button == 0) setDragging(true);
                 return true;
             }
@@ -97,7 +97,7 @@ public interface ParentContainer extends ParentElement, Drawable, Selectable {
         if (getFocused() != null) {
 
             boolean breaking = getFocused().mouseReleased(mouseX, mouseY, button);
-            if (!breaking) setFocused(null);
+            if (!breaking) focusOn(null);
             return breaking;
         }
         return ParentElement.super.mouseReleased(mouseX, mouseY, button);
@@ -117,11 +117,9 @@ public interface ParentContainer extends ParentElement, Drawable, Selectable {
         addDrawable(child);
     }
 
-    @Override
-    default void setFocused(@Nullable Element element) {
+    default void focusOn(@Nullable Element element) {
         if (getFocused() != null) getFocused().setFocused(false);
-        getParent().setFocused(element);
-        //setFocused(element); // todo check this
+        setFocused(element);
         if (element != null) element.setFocused(true);
     }
 

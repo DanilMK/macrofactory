@@ -67,7 +67,7 @@ public class ScrollableContainer extends ScrollableWidget implements ParentConta
 
     @Override
     public void setFocused(@Nullable Element focused) {
-        container.setFocused(focused);
+        container.focusOn(focused);
     }
 
     @Override

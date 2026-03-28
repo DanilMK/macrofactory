@@ -150,7 +150,7 @@ public abstract class WidgetList<T extends FilteredEntry> extends WidgetBase imp
     public void refreshEntries() {
         widgetEntries.clear();
         container.clear();
-        MacroFactory.LOGGER.info("Refresh entries");
+        //MacroFactory.LOGGER.info("Refresh entries");
 
         if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(this::createWidgetEntry);
         else addFilteredContents(this::createWidgetEntry);
@@ -160,7 +160,7 @@ public abstract class WidgetList<T extends FilteredEntry> extends WidgetBase imp
         Map<T, WidgetListEntry<T>> oldEntries = widgetEntries.stream().collect(Collectors.toMap(WidgetListEntry::getEntry, entry -> entry));
         widgetEntries.clear();
         container.clear();
-        MacroFactory.LOGGER.info("Refresh positions");
+        //MacroFactory.LOGGER.info("Refresh positions");
 
         if (widgetSearchBar == null || !widgetSearchBar.hasFilter()) addNonFilteredContents(t -> refreshWidgetEntry(t, oldEntries));
         else addFilteredContents(t -> refreshWidgetEntry(t, oldEntries));
