@@ -8,11 +8,12 @@ import fi.dy.masa.malilib.config.options.ConfigHotkey;
 import fi.dy.masa.malilib.config.options.ConfigString;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.hotkeys.*;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.smok.macrofactory.HotKeyWithCallBack;
 import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.gui.selector.MacroSelectionGui;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,10 +122,10 @@ public class Module implements IKeybindProvider {
     // Execute operation
 
     private boolean openGui(KeyAction keyAction, IKeybind keybind) {
-        Screen currentScreen = MinecraftClient.getInstance().currentScreen;
+        Screen currentScreen = Minecraft.getInstance().screen;
         if (keyAction == KeyAction.RELEASE) {
             if (currentScreen instanceof MacroSelectionGui) {
-                currentScreen.close();
+                currentScreen.onClose();
                 return true;
             }
         }
@@ -137,4 +138,12 @@ public class Module implements IKeybindProvider {
         return false;
     }
 
+    public static @Nullable Module readFromJson(@Nullable JsonElement element) {
+        if (element != null && element.isJsonObject()) {
+            Module module = new Module();
+            module.setValueFromJsonElement(element);
+            return module;
+        }
+        return null;
+    }
 }

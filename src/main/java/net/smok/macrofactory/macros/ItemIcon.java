@@ -3,55 +3,56 @@ package net.smok.macrofactory.macros;
 import com.google.gson.*;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.config.options.ConfigBase;
-import fi.dy.masa.malilib.gui.button.ButtonBase;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemIcon extends ConfigBase<ItemIcon> implements IConfigBase {
 
-    private ItemStack itemStack;
-    private final ItemStack defaultItemStack;
+    private final Item defaultItemStack;
+    private Item itemStack;
+
+
 
     public ItemIcon(String name, ItemStack defaultItemStack, String comment) {
         super(null, name, comment);
-        this.defaultItemStack = defaultItemStack;
-        itemStack = defaultItemStack;
+        this.defaultItemStack = defaultItemStack.getItem();
+        itemStack = defaultItemStack.getItem();
     }
 
     public ItemStack getItemStack() {
-        return itemStack;
+        return itemStack == null ? ItemStack.EMPTY : itemStack.getDefaultInstance();
     }
 
     public void setItemStack(ItemStack itemStack) {
-        if (itemStack == null || itemStack.isEmpty()) this.itemStack = ItemStack.EMPTY;
-        else this.itemStack = itemStack.copy();
+        if (itemStack == null || itemStack.isEmpty()) {
+            this.itemStack = null;
+        }
+        else {
+            this.itemStack = itemStack.getItem();
+
+        }
     }
 
     @Override
     public void setValueFromJsonElement(JsonElement element) {
         JsonObject json = element.getAsJsonObject();
-        Item type = Registries.ITEM.get(Identifier.of(json.get("Type").getAsString()));
-        itemStack = type.getDefaultStack();
-        itemStack.setDamage(json.get("Damage").getAsInt());
-
+        if (json.has("Type") && json.get("Type").isJsonPrimitive())
+            itemStack = BuiltInRegistries.ITEM.getValue(Identifier.parse(json.get("Type").getAsString()));
     }
 
     @Override
     public JsonElement getAsJsonElement() {
         JsonObject json = new JsonObject();
-        json.addProperty("Type", itemStack.getItem().toString());
-        json.addProperty("Damage", itemStack.getDamage());
-
+        json.addProperty("Type", itemStack == null ? "" : itemStack.toString());
         return json;
     }
 
     @Override
     public boolean isModified() {
-        return !ItemStack.areItemsEqual(defaultItemStack, itemStack);
+        return itemStack != defaultItemStack;
     }
 
     @Override
@@ -59,15 +60,12 @@ public class ItemIcon extends ConfigBase<ItemIcon> implements IConfigBase {
         itemStack = defaultItemStack;
     }
 
-    public void setIconFromHand(ButtonBase buttonBase, int mouseButton) {
+    public void setIconFromHand(int mouseButton) {
         if (mouseButton != 0) return;
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
-        setItemStack(client.player.getInventory().getSelectedStack());
+        setItemStack(client.player.getInventory().getSelectedItem());
 
     }
 
-    public void drawIcon(DrawContext drawContext, int x, int y, int width, int height) {
-        drawContext.drawItem(getItemStack(), x + width / 2 - 8, y + height / 2 - 8);
-    }
 }

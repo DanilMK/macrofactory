@@ -3,6 +3,7 @@ package net.smok.macrofactory.gui.selector;
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.gui.widgets.WidgetBase;
 import fi.dy.masa.malilib.render.GuiContext;
+import net.minecraft.world.item.ItemStack;
 import net.smok.macrofactory.macros.ItemIcon;
 
 public class ItemIconWidget extends WidgetBase {
@@ -20,17 +21,13 @@ public class ItemIconWidget extends WidgetBase {
     @Override
     public void render(GuiContext drawContext, int mouseX, int mouseY, boolean selected) {
         int color = selected ? 0xE0FAFAFA : 0xE0020202;
-        drawContext.drawVerticalLine(x, y, y + height, color);
-        drawContext.drawVerticalLine(x + width, y, y + height, color);
-        drawContext.drawHorizontalLine(x, x + width, y, color);
-        drawContext.drawHorizontalLine(x, x + width, y + height, color);
+        drawContext.outline(x, y, width, height, color);
 
-
-        if (itemIcon.isModified()) {
-            itemIcon.drawIcon(drawContext, x, y, width, height);
-        } else {
-            //bindTexture(defaultIcon.getTexture(), drawContext);
+        ItemStack itemStack = itemIcon.getItemStack();
+        if (itemStack.isEmpty()) {
             defaultIcon.renderAt(drawContext, x, y, 0, false, false);
+        } else {
+            drawContext.item(itemIcon.getItemStack(), x + width / 2 - 8, y + height / 2 - 8);
         }
     }
 

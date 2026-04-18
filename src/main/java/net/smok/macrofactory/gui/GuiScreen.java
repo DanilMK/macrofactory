@@ -13,12 +13,13 @@ import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.KeyCodes;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.ModulesKeybindProvider;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -42,15 +43,14 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
         super.drawScreenBackground(ctx, mouseX, mouseY);
     }
 
-
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (this.client != null && this.client.world == null) {
-            this.renderPanoramaBackground(context, delta);
+    public void extractBackground(@NotNull GuiGraphicsExtractor context, int mouseX, int mouseY, float deltaTicks) {
+        if (this.minecraft.level == null) {
+            this.extractPanorama(context, deltaTicks);
         }
 
-        this.applyBlur(context);
-        this.renderDarkening(context);
+        this.extractBlurredBackground(context);
+        //this.renderDarkening(context);
     }
 
     // Copy code because I can't extend GuiConfigBase.class
@@ -100,7 +100,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
     }
 
     @Override
-    public boolean onKeyTyped(KeyInput input) {
+    public boolean onKeyTyped(KeyEvent input) {
         if (this.activeKeybindButton != null)
         {
             this.activeKeybindButton.onKeyPressed(input.key());
@@ -125,7 +125,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
     }
 
     @Override
-    public boolean onCharTyped(CharInput input) {
+    public boolean onCharTyped(CharacterEvent input) {
         if (this.activeKeybindButton != null)
         {
             // Prevents the chars leaking into the search box, if we didn't pretend to handle them here
@@ -142,7 +142,7 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
     }
 
     @Override
-    public boolean onMouseClicked(Click click, boolean doubleClick) {
+    public boolean onMouseClicked(MouseButtonEvent click, boolean doubleClick) {
         if (super.onMouseClicked(click, doubleClick))
         {
             return true;

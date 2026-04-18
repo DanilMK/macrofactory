@@ -2,36 +2,36 @@ package net.smok.macrofactory;
 
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 
 import java.util.function.Function;
 
 public enum PlayerKeybind implements IConfigOptionListEntry {
-    FORWARD(client -> client.options.forwardKey),
-    JUMP(client -> client.options.jumpKey),
-    USE(client -> client.options.useKey),
-    ATTACK(client -> client.options.attackKey),
-    BACK(client -> client.options.backKey),
-    SNEAK(client -> client.options.sneakKey)
+    FORWARD(client -> client.options.keyUp),
+    JUMP(client -> client.options.keyJump),
+    USE(client -> client.options.keyUse),
+    ATTACK(client -> client.options.keyAttack),
+    BACK(client -> client.options.keyDown),
+    SNEAK(client -> client.options.keyShift)
     ;
-    private final Function<MinecraftClient, KeyBinding> keyBindingGetter;
+    private final Function<Minecraft, KeyMapping> keyBindingGetter;
 
-    PlayerKeybind(Function<MinecraftClient, KeyBinding> keyBindingGetter) {
+    PlayerKeybind(Function<Minecraft, KeyMapping> keyBindingGetter) {
         this.keyBindingGetter = keyBindingGetter;
     }
 
 
-    public void setPressed(MinecraftClient client, boolean pressed) {
-        keyBindingGetter.apply(client).setPressed(pressed);
+    public void setPressed(Minecraft client, boolean pressed) {
+        keyBindingGetter.apply(client).setDown(pressed);
     }
 
-    public boolean isPressed(MinecraftClient client) {
-        return keyBindingGetter.apply(client).isPressed();
+    public boolean isPressed(Minecraft client) {
+        return keyBindingGetter.apply(client).isDown();
     }
 
-    public boolean wasPressed(MinecraftClient client) {
-        return keyBindingGetter.apply(client).wasPressed();
+    public boolean wasPressed(Minecraft client) {
+        return keyBindingGetter.apply(client).consumeClick();
     }
 
     @Override

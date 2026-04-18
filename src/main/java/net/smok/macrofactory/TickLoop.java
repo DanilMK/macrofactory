@@ -1,8 +1,8 @@
 package net.smok.macrofactory;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ChatScreen;
 import net.smok.macrofactory.macros.Macro;
 
 import java.util.ArrayList;
@@ -14,20 +14,17 @@ public class TickLoop implements ClientTickEvents.EndTick {
     private static final List<Macro> remover = new ArrayList<>();
 
 
-    private static boolean breaking;
-
     public static void removeFromLoop(Macro macro) {
         if (!remover.contains(macro)) remover.add(macro);
     }
 
     @Override
-    public void onEndTick(MinecraftClient client) {
-        if (client.player == null || client.world == null) return;
+    public void onEndTick(Minecraft client) {
+        if (client.player == null || client.level == null) return;
 
-        if (client.currentScreen instanceof ChatScreen) return;
+        if (client.screen instanceof ChatScreen) return;
 
-        if (client.currentScreen != null || breaking) {
-            breaking = false;
+        if (client.screen != null) {
             breakLoop(client);
         }
 
@@ -44,10 +41,8 @@ public class TickLoop implements ClientTickEvents.EndTick {
     public static void addToLoop(Macro macro) {
         macrosInLoop.add(macro);
     }
-    public static void breakLoop() {
-        breaking = true;
-    }
-    private static void breakLoop(MinecraftClient client) {
+
+    private static void breakLoop(Minecraft client) {
         for (Macro macro : macrosInLoop) macro.endLoop(client);
         macrosInLoop.clear();
     }

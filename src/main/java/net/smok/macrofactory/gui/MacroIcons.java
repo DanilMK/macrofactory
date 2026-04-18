@@ -3,7 +3,7 @@ package net.smok.macrofactory.gui;
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.render.RenderUtils;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.smok.macrofactory.MacroFactory;
 
 public enum MacroIcons implements IGuiIcon {
@@ -21,7 +21,7 @@ public enum MacroIcons implements IGuiIcon {
     MACRO_EMPTY_BUTTON(100, 40, 20, 20),
     CHAT(0, 200, 20, 20);
 
-    public static final Identifier TEXTURE = Identifier.of(MacroFactory.MOD_ID, "textures/icons.png");
+    public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(MacroFactory.MOD_ID, "textures/icons.png");
 
     private final int u;
     private final int v;

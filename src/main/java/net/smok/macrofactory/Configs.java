@@ -11,25 +11,24 @@ import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.hotkeys.IKeybindManager;
 import fi.dy.masa.malilib.hotkeys.IKeybindProvider;
 import fi.dy.masa.malilib.util.FileUtils;
-import fi.dy.masa.malilib.util.JsonUtils;
 import fi.dy.masa.malilib.util.StringUtils;
+import fi.dy.masa.malilib.util.data.json.JsonUtils;
 import net.smok.macrofactory.gui.modules.ModulesGui;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.Module;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 
 public class Configs implements IConfigHandler, IKeybindProvider {
 
     public static final Configs INSTANCE = new Configs();
     private static final String CONFIG_FILE_NAME = MacroFactory.MOD_ID + ".json";
     private static final String MACRO_DIR = MacroFactory.MOD_ID + "_macros";
-    private static final File CONFIG_FILE = FileUtils.getConfigDirectoryAsPath().resolve(CONFIG_FILE_NAME).toFile();
-    private static final File MACRO_DIRECTORY = FileUtils.getConfigDirectoryAsPath().resolve(MACRO_DIR).toFile();
+    private static final Path CONFIG_FILE = FileUtils.getConfigDirectory().resolve(CONFIG_FILE_NAME);
+    private static final Path MACRO_DIRECTORY = FileUtils.getConfigDirectory().resolve(MACRO_DIR);
 
 
     @Override
@@ -60,7 +59,7 @@ public class Configs implements IConfigHandler, IKeybindProvider {
 
     public static class Macros {
 
-        public static List<Module> Modules;
+        public static final List<Module> Modules;
 
         static {
             Module creative = new Module("module.default.default");
@@ -83,10 +82,7 @@ public class Configs implements IConfigHandler, IKeybindProvider {
     }
 
     private static void readGeneric() {
-        File configFile = CONFIG_FILE;
-
-        if (!configFile.exists() || !configFile.isFile() || !configFile.canRead()) return;
-        JsonElement element = JsonUtils.parseJsonFile(configFile);
+        JsonElement element = JsonUtils.parseJsonFile(CONFIG_FILE);
 
         if (element == null || !element.isJsonObject()) return;
         JsonObject root = element.getAsJsonObject();
@@ -101,58 +97,46 @@ public class Configs implements IConfigHandler, IKeybindProvider {
     }
 
     private static void readMacros() {
-        if (!MACRO_DIRECTORY.exists() || !MACRO_DIRECTORY.isDirectory()) return;
 
-        File[] files = MACRO_DIRECTORY.listFiles(pathname -> pathname.getName().endsWith(".json"));
-        if (files == null) return;
-        List<Module> modules = new ArrayList<>();
+        if (!Files.exists(MACRO_DIRECTORY)) return;
 
-        for (File moduleFile : files) {
-            if (!moduleFile.exists() || !moduleFile.isFile() || !moduleFile.canRead()) continue;
-            try {
-                JsonElement element = JsonUtils.parseJsonFile(moduleFile);
-                if (element == null || !element.isJsonObject()) continue;
-
-                Module module = new Module();
-                module.setValueFromJsonElement(element);
-
-
-                modules.add(module);
-
-            } catch (Exception e) {
-                MacroFactory.LOGGER.info("Corrupted Options file. \n"+e.getLocalizedMessage());
-            }
-
+        try (var files = Files.list(MACRO_DIRECTORY)) {
+            Macros.Modules.clear();
+            files.filter(path -> path.toString().endsWith(".json"))
+                    .map(file -> Module.readFromJson(JsonUtils.parseJsonFile(file)))
+                    .filter(Objects::nonNull).forEach(Macros.Modules::add);
+        } catch (IOException e) {
+            MacroFactory.LOGGER.error("Error while reading macros.", e);
         }
-        Macros.Modules = modules;
     }
 
     @Override
     public void save() {
-        File dir = FileUtils.getConfigDirectoryAsPath().toFile();
-
-        writeGeneric(dir);
-
-        writeMacros(dir);
-
+        writeGeneric();
+        writeMacros();
     }
 
-    private static void writeGeneric(File dir) {
-        if ((dir.exists() && dir.isDirectory()) || dir.mkdirs())
-        {
-            JsonObject genericJson = new JsonObject();
-            ConfigUtils.writeConfigBase(genericJson, "Generic", Generic.OPTIONS);
-            JsonUtils.writeJsonToFile(genericJson, new File(dir, CONFIG_FILE_NAME));
+    private static void writeGeneric() {
+        JsonObject genericJson = new JsonObject();
+        ConfigUtils.writeConfigBase(genericJson, "Generic", Generic.OPTIONS);
+        JsonUtils.writeJsonToFile(genericJson, CONFIG_FILE);
+    }
+
+    private static void writeMacros() {
+        FileUtils.createDirectoriesIfMissing(MACRO_DIRECTORY);
+
+
+        try (var files = Files.list(MACRO_DIRECTORY).filter(path -> path.toString().endsWith(".json"))) {
+            files.forEach(path -> {
+                try {
+                    Files.delete(path);
+                } catch (IOException e) {
+                    MacroFactory.LOGGER.error("Cannot delete macros file.", e);
+                }
+            });
+        } catch (IOException e) {
+            MacroFactory.LOGGER.error("Cannot delete macros files.", e);
         }
-    }
-
-    private static void writeMacros(File dir) {
-        File macrosDir = new File(dir, MACRO_DIR);
-        if ((!macrosDir.exists() || !macrosDir.isDirectory()) && !macrosDir.mkdirs()) return;
-
-        File[] files = macrosDir.listFiles(pathname -> pathname.getName().endsWith(".json"));
-        if (files != null) for (File file : files) //noinspection ResultOfMethodCallIgnored
-            file.delete();
 
         Map<String, Integer> count = new HashMap<>();
 
@@ -161,10 +145,9 @@ public class Configs implements IConfigHandler, IKeybindProvider {
             if (count.containsKey(module.getName())) n = count.get(module.getName());
 
             count.put(module.getName(), n + 1);
-            if (n == 0)
-                JsonUtils.writeJsonToFile(module.getAsJsonElement(), new File(macrosDir, module.getName() + ".json"));
-            else JsonUtils.writeJsonToFile(module.getAsJsonElement(), new File(macrosDir, module.getName() + n + ".json"));
+            String moduleName = n == 0 ? module.getName() + ".json" : module.getName() + n + ".json";
 
+            JsonUtils.writeJsonToFile(module.getAsJsonElement(), MACRO_DIRECTORY.resolve(moduleName));
         }
     }
 }

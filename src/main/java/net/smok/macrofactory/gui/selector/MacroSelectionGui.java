@@ -3,7 +3,7 @@ package net.smok.macrofactory.gui.selector;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.smok.macrofactory.gui.PositionAlignment;
 import net.smok.macrofactory.gui.Rect;
 import net.smok.macrofactory.gui.RectContainer;
@@ -72,13 +72,13 @@ public class MacroSelectionGui extends GuiBase {
     }
 
     @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, float partialTicks) {
+    public void extractRenderState(GuiGraphicsExtractor drawContext, int mouseX, int mouseY, float partialTicks) {
 
         String mainText = selectedWidget != null ? selectedWidget.getSelectName() : module.getName();
-        drawContext.drawCenteredTextWithShadow(textRenderer, StringUtils.translate(mainText), width / 2, rectContainer.getMinY() - 20, -1);
+        drawContext.centeredText(font, StringUtils.translate(mainText), width / 2, rectContainer.getMinY() - 20, -1);
         if (module.getAll().isEmpty())
         {
-            drawContext.drawCenteredTextWithShadow(textRenderer, StringUtils.translate("gui.empty_module"), width / 2, rectContainer.getMinY(), -1);
+            drawContext.centeredText(font, StringUtils.translate("gui.empty_module"), width / 2, rectContainer.getMinY(), -1);
             return;
         }
 
@@ -98,8 +98,8 @@ public class MacroSelectionGui extends GuiBase {
     }
 
     @Override
-    public void close() {
-        super.close();
-        if (client != null && selectedWidget != null) selectedWidget.callMacro(client);
+    public void onClose() {
+        super.onClose();
+        if (selectedWidget != null) selectedWidget.callMacro(minecraft);
     }
 }

@@ -7,9 +7,10 @@ import fi.dy.masa.malilib.config.options.*;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
 import fi.dy.masa.malilib.hotkeys.KeybindSettings;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.ItemStack;
 import net.smok.macrofactory.HotKeyWithCallBack;
+import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.PlayerKeybind;
 import net.smok.macrofactory.TickLoop;
 import net.smok.macrofactory.macros.actions.*;
@@ -168,17 +169,17 @@ public class Macro {
     // Execute macro
 
     private boolean onKeyAction(KeyAction keyAction, IKeybind key) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         macroExecute(keyAction == KeyAction.PRESS, client);
         return true;
     }
 
-    public void macroExecute(boolean press, @NotNull MinecraftClient client) {
+    public void macroExecute(boolean press, @NotNull Minecraft client) {
+        MacroFactory.LOGGER.info("Click " + getName() + " press:" + press + " callType:" + callType.getOptionListValue());
         switch ((CallType)callType.getOptionListValue()) {
 
             case SINGLE -> {
-                if (!press)
-                    getAction().run(client, MacroAction.Loop.TICK, this);
+                getAction().run(client, press ? MacroAction.Loop.TICK : MacroAction.Loop.END, this);
             }
             case REPEAT -> {
                 if (!press) {
@@ -198,7 +199,7 @@ public class Macro {
         }
     }
 
-    public void tickLoop(MinecraftClient client) {
+    public void tickLoop(Minecraft client) {
         if (cd <= 0) {
             cd += delay.getIntegerValue();
             getAction().run(client, MacroAction.Loop.TICK, this);
@@ -209,12 +210,12 @@ public class Macro {
         if (cd > 0) cd--;
     }
 
-    public void startLoop(MinecraftClient client) {
+    public void startLoop(Minecraft client) {
         enable = true;
         getAction().run(client, MacroAction.Loop.START, this);
     }
 
-    public void endLoop(MinecraftClient client) {
+    public void endLoop(Minecraft client) {
         enable = false;
         getAction().run(client, MacroAction.Loop.END, this);
     }

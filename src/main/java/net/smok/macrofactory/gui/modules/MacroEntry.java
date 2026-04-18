@@ -64,7 +64,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
         if (macro.configure) {
             addLine();
 
-            ButtonGeneric iconButton = addGenericButton(true, MacroIcons.MACRO_EMPTY_BUTTON, macro.getIcon()::setIconFromHand, macro.getIcon().getComment());
+            ButtonGeneric iconButton = addGenericButton(true, MacroIcons.MACRO_EMPTY_BUTTON, (_, mouseButton) -> macro.getIcon().setIconFromHand(mouseButton), macro.getIcon().getComment());
             addWidget(new ItemIconWidget(iconButton.getX(), iconButton.getY(), iconButton.getWidth(), iconButton.getHeight(), macro.getIcon(), MacroIcons.MACRO_EMPTY_ICON));
             delayText = addTextField(new PositionAlignment(false, 40 + space()), macro.getDelayConfig(), 4);
             addOptionListButton(new PositionAlignment(false, 120), macro.getCallType(), this::changeCallType);

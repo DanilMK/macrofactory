@@ -12,9 +12,9 @@ import fi.dy.masa.malilib.gui.wrappers.TextFieldWrapper;
 import fi.dy.masa.malilib.hotkeys.IHotkey;
 import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.util.KeyCodes;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.smok.macrofactory.gui.utils.TextFieldListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,13 +52,13 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     {
         Rect rect = addRect(alignment);
         GuiTextFieldGeneric field = new GuiTextFieldGeneric(rect.x() + 2, rect.y() + 2, rect.width() - 4, rect.height() - 4, textRenderer);
-        field.setMaxLength(maxTextfieldTextLength);
-        field.setText(config.getStringValue());
 
 
         TextFieldWrapper<? extends GuiTextFieldGeneric> wrapper = new TextFieldWrapper<>(field, new TextFieldListener(config));
         textFields.add(wrapper);
         parent.addTextField(wrapper);
+        field.setMaxLength(maxTextfieldTextLength);
+        field.insertText(config.getStringValue());
 
         if (comment != null && !comment.isEmpty()) {
             addComment(rect.x(), rect.y(), rect.width(), rect.height(), comment);
@@ -162,7 +162,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     {
         // Check if any TextField don't is not last applied value
         for (TextFieldWrapper<?> textField : textFields) {
-            if (!textField.textField().getText().equals(this.lastAppliedValue))
+            if (!textField.textField().getValue().equals(this.lastAppliedValue))
                 return true;
         }
 
@@ -172,7 +172,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     public void applyNewValueToConfig() {
         for (TextFieldWrapper<?> textField : textFields) {
             textField.onGuiClosed();
-            lastAppliedValue = textField.textField().getText();
+            lastAppliedValue = textField.textField().getValue();
         }
     }
 
@@ -187,7 +187,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     }
 
     @Override
-    protected boolean onMouseClickedImpl(Click click, boolean doubleClick) {
+    protected boolean onMouseClickedImpl(MouseButtonEvent click, boolean doubleClick) {
         boolean ret = false;
 
         // Focus to any TextField
@@ -203,7 +203,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     }
 
     @Override
-    public boolean onKeyTypedImpl(KeyInput input) {
+    public boolean onKeyTypedImpl(KeyEvent input) {
         for (TextFieldWrapper<?> textField : textFields) {
             if (!textField.isFocused()) continue;
 
@@ -211,7 +211,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
 
                 // Apply value for each focused field
                 textField.onGuiClosed();
-                lastAppliedValue = textField.textField().getText();
+                lastAppliedValue = textField.textField().getValue();
                 return true;
 
             } else {
@@ -224,7 +224,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     }
 
     @Override
-    protected boolean onCharTypedImpl(CharInput input) {
+    protected boolean onCharTypedImpl(CharacterEvent input) {
         // CharType for each field
         for (TextFieldWrapper<?> textField : textFields)
             if (textField.onCharTyped(input)) return true;
@@ -235,7 +235,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     @Override
     public void render(GuiContext drawContext, int mouseX, int mouseY, boolean selected) {
         for (TextFieldWrapper<?> textField : textFields) {
-            textField.textField().render(drawContext, mouseX, mouseY, 0f);
+            textField.textField().extractWidgetRenderState(drawContext, mouseX, mouseY, 0f);
         }
         super.render(drawContext, mouseX, mouseY, selected);
     }

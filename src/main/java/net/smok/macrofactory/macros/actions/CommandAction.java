@@ -6,9 +6,9 @@ import fi.dy.masa.malilib.config.options.ConfigBoolean;
 import fi.dy.masa.malilib.config.options.ConfigString;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.player.LocalPlayer;
 import net.smok.macrofactory.gui.ButtonSwitch;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.SmokUtils;
@@ -60,8 +60,8 @@ public class CommandAction implements MacroAction {
     }
 
     @Override
-    public void run(@NotNull MinecraftClient client, Loop loop, Macro macro) {
-        ClientPlayerEntity player = client.player;
+    public void run(@NotNull Minecraft client, Loop loop, Macro macro) {
+        var player = client.player;
         if (player == null || loop == Loop.OFF_TICK || loop == Loop.END) return;
 
         if (inChat.getBooleanValue()) GuiBase.openGui(new ChatScreen(substringValue(), false));
@@ -72,8 +72,8 @@ public class CommandAction implements MacroAction {
         String value = command.getStringValue();
         return value.length() > 256 ? value.substring(0, 256) : value;
     }
-    private void sendMessageOrCommand(ClientPlayerEntity player, String message) {
-        if (message.startsWith("/")) player.networkHandler.sendChatCommand(message.substring(1));
-        else player.networkHandler.sendChatMessage(message);
+    private void sendMessageOrCommand(LocalPlayer player, String message) {
+        if (message.startsWith("/")) player.connection.sendCommand(message.substring(1));
+        else player.connection.sendChat(message);
     }
 }

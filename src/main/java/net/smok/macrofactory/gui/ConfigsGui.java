@@ -3,7 +3,7 @@ package net.smok.macrofactory.gui;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.smok.macrofactory.Configs;
 import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.gui.modules.ModulesGui;
@@ -32,7 +32,7 @@ public class ConfigsGui extends GuiConfigsBase {
         int y = 26;
 
         ButtonGeneric button = new ButtonGeneric(x, y, -1, 20, "macro");
-        this.addButton(button, (button1, mouseButton) -> GuiBase.openGui(new ModulesGui(this)));
+        this.addButton(button, (_, _) -> GuiBase.openGui(new ModulesGui(this)));
     }
 
 

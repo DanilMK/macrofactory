@@ -5,7 +5,7 @@ import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.ConfigButtonKeybind;
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.gui.widgets.WidgetHoverInfo;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.smok.macrofactory.Configs;
 import net.smok.macrofactory.gui.*;
 import net.smok.macrofactory.macros.Macro;
@@ -30,7 +30,7 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
         IGuiIcon folderIcon = MacroIcons.FOLDER_ADD;
         int folderX = 10 + getBrowserWidth() - folderIcon.getWidth();
         int folderY = 25;
-        ButtonGeneric buttonAdd = addButton(new ButtonGeneric(folderX, folderY, folderIcon), (button, mouseButton) -> {
+        ButtonGeneric buttonAdd = addButton(new ButtonGeneric(folderX, folderY, folderIcon), (_, mouseButton) -> {
             if (mouseButton == 0) {
                 Configs.Macros.Modules.add(new Module("Mew Module", true));
                 if (getListWidget() != null) getListWidget().refreshEntries();
@@ -48,7 +48,7 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
         addWidget(new WidgetHoverInfo(keybindX, keybindY, keybindWidth, keybindHeight, Configs.Generic.CMD_MACRO_OPEN.getComment()));
 
         addWidget(new ButtonGenericWithoutScroll(getBrowserWidth() / 2 - 100, getBrowserHeight() + 40, 200, false, "gui.done")
-                .setActionListener((button, mouseButton) -> {
+                .setActionListener((_, mouseButton) -> {
                     if (mouseButton == 0) closeGui(true);
                 }));
 
