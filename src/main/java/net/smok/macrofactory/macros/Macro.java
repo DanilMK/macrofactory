@@ -175,7 +175,6 @@ public class Macro {
     }
 
     public void macroExecute(boolean press, @NotNull Minecraft client) {
-        MacroFactory.LOGGER.info("Click " + getName() + " press:" + press + " callType:" + callType.getOptionListValue());
         switch ((CallType)callType.getOptionListValue()) {
 
             case SINGLE -> {
