@@ -27,16 +27,12 @@ public enum MacroIcons implements IGuiIcon {
     private final int v;
     private final int w;
     private final int h;
-    private final int hoverOffU;
-    private final int hoverOffV;
 
     MacroIcons(int u, int v, int w, int h) {
         this.u = u;
         this.v = v;
         this.w = w;
         this.h = h;
-        hoverOffU = w;
-        hoverOffV = 0;
     }
 
     @Override
@@ -67,16 +63,10 @@ public enum MacroIcons implements IGuiIcon {
         int v = this.v;
 
         if (enabled)
-        {
-            u += this.hoverOffU;
-            v += this.hoverOffV;
-        }
+            u += this.w;
 
         if (selected)
-        {
-            u += this.hoverOffU * 2;
-            v += this.hoverOffV * 2;
-        }
+            u += this.w * 2;
 
 
         RenderUtils.drawTexturedRect(drawContext, TEXTURE, x, y, u, v, this.w, this.h, zLevel);
@@ -84,8 +74,7 @@ public enum MacroIcons implements IGuiIcon {
 
 
     @Override
-    public Identifier getTexture()
-    {
+    public Identifier getTexture() {
         return TEXTURE;
     }
 }
