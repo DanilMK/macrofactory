@@ -10,7 +10,6 @@ import fi.dy.masa.malilib.hotkeys.KeybindSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import net.smok.macrofactory.HotKeyWithCallBack;
-import net.smok.macrofactory.MacroFactory;
 import net.smok.macrofactory.PlayerKeybind;
 import net.smok.macrofactory.TickLoop;
 import net.smok.macrofactory.macros.actions.*;

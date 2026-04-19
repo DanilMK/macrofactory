@@ -12,14 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PlayerAction extends ConfigOptionList implements MacroAction {
 
-    public PlayerAction() {
-        super("Keybind", PlayerKeybind.USE, "");
-    }
-
-    public PlayerAction(PlayerKeybind keyBinding) {
-        super("Keybind", PlayerKeybind.USE, "");
-        setOptionListValue(keyBinding);
-    }
 
     public PlayerAction(String name, String comment) {
         super(name, PlayerKeybind.USE, comment);
@@ -39,7 +31,7 @@ public final class PlayerAction extends ConfigOptionList implements MacroAction 
 
     @Override
     public void run(@NotNull Minecraft client, Loop loop, Macro macro) {
-        if (loop != Loop.END && getKeyBinding().wasPressed(client)) {
+        if (loop != Loop.END && getKeyBinding().wasClicked()) {
             TickLoop.removeFromLoop(macro);
             return;
         }

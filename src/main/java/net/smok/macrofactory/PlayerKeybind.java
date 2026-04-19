@@ -8,40 +8,49 @@ import net.minecraft.client.Minecraft;
 import java.util.function.Function;
 
 public enum PlayerKeybind implements IConfigOptionListEntry {
-    FORWARD(client -> client.options.keyUp),
-    JUMP(client -> client.options.keyJump),
-    USE(client -> client.options.keyUse),
-    ATTACK(client -> client.options.keyAttack),
-    BACK(client -> client.options.keyDown),
-    SNEAK(client -> client.options.keyShift)
+    FORWARD(client -> client.options.keyUp, "key.forward"),
+    JUMP(client -> client.options.keyJump, "key.jump"),
+    USE(client -> client.options.keyUse, "key.use"),
+    ATTACK(client -> client.options.keyAttack, "key.attack"),
+    BACK(client -> client.options.keyDown, "key.back"),
+    SNEAK(client -> client.options.keyShift, "key.sneak")
     ;
-    private final Function<Minecraft, KeyMapping> keyBindingGetter;
+    public static final PlayerKeybind[] VALUES = values();
 
-    PlayerKeybind(Function<Minecraft, KeyMapping> keyBindingGetter) {
+    private final Function<Minecraft, KeyMapping> keyBindingGetter;
+    private final String name;
+    private boolean click;
+    private boolean down;
+
+    PlayerKeybind(Function<Minecraft, KeyMapping> keyBindingGetter, String name) {
         this.keyBindingGetter = keyBindingGetter;
+        this.name = name;
+    }
+
+    public static void click(KeyMapping keyMapping) {
+        for (PlayerKeybind value : VALUES)
+            if (value.name.equals(keyMapping.getName()) && value.down) value.click = true;
     }
 
 
     public void setPressed(Minecraft client, boolean pressed) {
-        keyBindingGetter.apply(client).setDown(pressed);
+        if (!click || pressed) keyBindingGetter.apply(client).setDown(pressed);
+        down = pressed;
+        click = false;
     }
 
-    public boolean isPressed(Minecraft client) {
-        return keyBindingGetter.apply(client).isDown();
-    }
-
-    public boolean wasPressed(Minecraft client) {
-        return keyBindingGetter.apply(client).consumeClick();
+    public boolean wasClicked() {
+        return click;
     }
 
     @Override
     public String getStringValue() {
-        return name();
+        return name;
     }
 
     @Override
     public String getDisplayName() {
-        return  StringUtils.translate("key."+name().toLowerCase());
+        return  StringUtils.translate(name);
     }
 
     @Override
