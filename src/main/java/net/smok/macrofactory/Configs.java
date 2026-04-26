@@ -45,7 +45,7 @@ public class Configs implements IConfigHandler, IKeybindProvider {
 
     public static class Generic {
 
-        public static final ConfigHotkey CMD_MACRO_OPEN = new HotKeyWithCallBack("cmdMacroOpen", "Y", "Menu Open", (action, key) -> {
+        public static final ConfigHotkey CMD_MACRO_OPEN = new HotKeyWithCallBack("cmdMacroOpen", "Y", "Menu Open", (_, _) -> {
             GuiBase.openGui(new ModulesGui(null));
             return true;
         });
@@ -142,12 +142,13 @@ public class Configs implements IConfigHandler, IKeybindProvider {
 
         for (Module module : Macros.Modules) {
             int n = 0;
-            if (count.containsKey(module.getName())) n = count.get(module.getName());
+            String moduleName = module.getName().isEmpty() ? "Unnamed module" : module.getName();
+            if (count.containsKey(moduleName)) n = count.get(moduleName);
 
-            count.put(module.getName(), n + 1);
-            String moduleName = n == 0 ? module.getName() + ".json" : module.getName() + n + ".json";
+            count.put(moduleName, n + 1);
+            String fileName = n == 0 ? moduleName + ".json" : moduleName + n + ".json";
 
-            JsonUtils.writeJsonToFile(module.getAsJsonElement(), MACRO_DIRECTORY.resolve(moduleName));
+            JsonUtils.writeJsonToFile(module.getAsJsonElement(), MACRO_DIRECTORY.resolve(fileName));
         }
     }
 }
