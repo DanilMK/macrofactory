@@ -20,8 +20,6 @@ public class ItemIconWidget extends WidgetBase {
 
     @Override
     public void render(GuiContext drawContext, int mouseX, int mouseY, boolean selected) {
-        int color = selected ? 0xE0FAFAFA : 0xE0020202;
-        drawContext.outline(x, y, width, height, color);
 
         ItemStack itemStack = itemIcon.getItemStack();
         if (itemStack.isEmpty()) {

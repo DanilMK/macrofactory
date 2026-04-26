@@ -2,13 +2,9 @@ package net.smok.macrofactory.gui.modules;
 
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.GuiTextFieldGeneric;
-import fi.dy.masa.malilib.gui.button.ButtonBase;
-import fi.dy.masa.malilib.gui.button.ButtonGeneric;
+import fi.dy.masa.malilib.gui.button.*;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
-import net.smok.macrofactory.gui.GuiEntry;
-import net.smok.macrofactory.gui.GuiList;
-import net.smok.macrofactory.gui.MacroIcons;
-import net.smok.macrofactory.gui.PositionAlignment;
+import net.smok.macrofactory.gui.*;
 import net.smok.macrofactory.gui.selector.ItemIconWidget;
 import net.smok.macrofactory.gui.utils.ListEntryBox;
 import net.smok.macrofactory.macros.CallType;
@@ -34,53 +30,105 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
         Macro macro = ModuleWrapper.getMacro(entry);
 
         if (macro == null) return;
+        int x = getX();
+        int lineHeight = getHeight();
+        int buttonHeight = 20;
+        int y = getY() + 1;
+        int center = x + getWidth() / 2;
 
-        addGenericButton(new PositionAlignment(false, MacroIcons.MACRO_REMOVE), MacroIcons.MACRO_REMOVE, this::removeMacro, BUTTON_MACRO_REMOVE);
-        addSwitchButton(new PositionAlignment(false, MacroIcons.SETTINGS), MacroIcons.SETTINGS, macro.configure, this::openConfigure, BUTTON_MACRO_CONFIGURE);
-        addKeybindButton(new PositionAlignment(false, 120), macro.getHotkey());
+        {
+            int rightX = x + getWidth();
+            ButtonGeneric removeButton = addButton(new ButtonGeneric(rightX -= bSize, y, MacroIcons.MACRO_REMOVE), (_, mouseButton1) -> removeMacro(mouseButton1, macro));
+            addCommentForWidget(removeButton, BUTTON_MACRO_REMOVE);
 
+            ButtonGeneric configButton = addButton(new ButtonSwitch(rightX -= bSize, y, MacroIcons.SETTINGS, macro.configure), (_, mouseButton) -> openConfigure(mouseButton, macro));
+            addCommentForWidget(configButton, BUTTON_MACRO_CONFIGURE);
 
-        if (macro.configure) {
-            addTextField(new PositionAlignment(true, 120), macro.getNameConfig(), 30);
-        } else {
-            String name = macro.getNameConfig().getStringValue();
-            if (!name.isEmpty()) {
-                addLabel(new PositionAlignment(true, 115, 5), GuiBase.COLOR_WHITE, name);
-            }
+            ConfigButtonKeybind keybindButton = addButton(new ConfigButtonKeybind(center, y, rightX - center - space(),
+                    buttonHeight, macro.getHotkey().getKeybind(), this.host), this.host.getButtonPressListener());
+            addCommentForWidget(keybindButton, macro.getHotkey().getComment());
         }
 
+        if (macro.configure) {
+
+            ButtonGeneric iconButton = addButton(new ButtonGeneric(x, y, MacroIcons.MACRO_EMPTY_BUTTON), (_, mouseButton) -> macro.getIcon().setIconFromHand(mouseButton));
+            x += bSize;
+            addCommentForWidget(iconButton, macro.getIcon().getComment());
+            addWidget(new ItemIconWidget(iconButton.getX(), iconButton.getY(), iconButton.getWidth(), iconButton.getHeight(), macro.getIcon(), MacroIcons.MACRO_EMPTY_ICON));
+
+            addTextField(x, y, center - x - space(), lineHeight, macro.getNameConfig(), macro.getNameConfig().getComment(), 30, true);
+
+            x = getX();
+            y += lineHeight;
+            int btnWidth = getWidth() / 2 - space();
+
+            addAction(macro, x, y, center, lineHeight, buttonHeight);
+            ConfigButtonOptionList optionButton = new ConfigButtonOptionList(center, y, btnWidth, buttonHeight, macro.getActionType());
+
+            addButton(optionButton, this::changeActionType);
+            addCommentForWidget(optionButton, macro.getActionType().getComment());
+
+            x = getX();
+            y += lineHeight;
+
+            delayText = addTextField(x, y, center - x - space(), buttonHeight, macro.getDelayConfig(), macro.getDelayConfig().getComment(), 4, false);
+            ConfigButtonOptionList optionButton1 = new ConfigButtonOptionList(center, y, btnWidth, lineHeight, macro.getCallType());
+
+            addButton(optionButton1, (_, mouseButton) -> changeCallType(mouseButton, macro));
+            addCommentForWidget(optionButton1, macro.getCallType().getComment());
+
+
+            setHeight(lineHeight * 3 + space());
+
+        } else {
+            if (macro.getIcon().isModified()) {
+                addWidget(new ItemIconWidget(x, y, 20, lineHeight, macro.getIcon(), MacroIcons.MACRO_EMPTY_ICON));
+                x += bSize;
+            }
+            String name = macro.getNameConfig().getStringValue();
+            if (!name.isEmpty() && (center - x) / 3 > MIN_BUTTON_SIZE) {
+                int labelWidth = Math.clamp((center - x) / 3, MIN_BUTTON_SIZE, MAX_BUTTON_SIZE);
+                addLabel(x, y, labelWidth, lineHeight, GuiBase.COLOR_WHITE, name);
+                x += labelWidth + space();
+            }
+
+            addAction(macro, x, y, center, lineHeight, buttonHeight);
+        }
+
+        changeButtonsByCallType(macro);
+        addWidget(new ListEntryBox(getX() - 2, this.y - 1, 1, getHeight() + 1, true, false));
+        addWidget(new ListEntryBox(x - 2, this.y + height - 1, getWidth(), 1, false, true));
+    }
+
+
+
+    private void addAction(Macro macro, int x, int y, int rightX, int lineHeight, int buttonHeight) {
         ActionType actionType = (ActionType) macro.getActionType().getOptionListValue();
 
         switch (actionType) {
 
             case Command -> {
                 CommandAction config = macro.getCommandAction();
-                inChatButton = addSwitchButton(false, MacroIcons.CHAT, config.getInChat().getBooleanValue(), config::switchInChat, config.getInChat().getComment());
-                addTextField(new PositionAlignment(true), config.getCommand(), 256);
+                if (macro.configure) {
+                    ButtonGeneric chatButton = addButton(new ButtonSwitch(x, y, MacroIcons.CHAT, config.getInChat().getBooleanValue()), config::switchInChat);
+                    addCommentForWidget(chatButton, config.getInChat().getComment());
+                    x += bSize;
+                    inChatButton = chatButton;
+                }
+                addTextField(x, y, rightX - x - space(), lineHeight, config.getCommand(), config.getCommand().getComment(), 256, true);
             }
-            case Player -> addOptionListButton(new PositionAlignment(true, 200), macro.getPlayerAction(), this.host.getButtonPressListener(), macro.getPlayerAction().getComment());
+            case Player -> {
+                ConfigButtonOptionList optionButton = new ConfigButtonOptionList(x, y, rightX - x - space(), buttonHeight, macro.getPlayerAction());
+
+                addButton(optionButton, this.host.getButtonPressListener());
+                addCommentForWidget(optionButton, macro.getPlayerAction().getComment());
+            }
         }
-
-        if (macro.configure) {
-            addLine();
-
-            ButtonGeneric iconButton = addGenericButton(true, MacroIcons.MACRO_EMPTY_BUTTON, (_, mouseButton) -> macro.getIcon().setIconFromHand(mouseButton), macro.getIcon().getComment());
-            addWidget(new ItemIconWidget(iconButton.getX(), iconButton.getY(), iconButton.getWidth(), iconButton.getHeight(), macro.getIcon(), MacroIcons.MACRO_EMPTY_ICON));
-            delayText = addTextField(new PositionAlignment(false, 40 + space()), macro.getDelayConfig(), 4);
-            addOptionListButton(new PositionAlignment(false, 120), macro.getCallType(), this::changeCallType);
-            addOptionListButton(new PositionAlignment(true, 200), macro.getActionType(), this::changeActionType);
-            addWidget(new ListEntryBox(x - 2, y + height - 1, getWidth(), 1, false, true));
-        }
-
-        changeButtonsByCallType(macro);
-        addWidget(new ListEntryBox(x - 2, y - 1, 1, getHeight() + 1, true, false));
-
     }
 
 
-    private void changeCallType(ButtonBase buttonBase, int mouseButton) {
-        Macro macro = ModuleWrapper.getMacro(entry);
-        if (mouseButton == 0 && macro != null) {
+    private void changeCallType(int mouseButton, Macro macro) {
+        if (mouseButton == 0) {
             changeButtonsByCallType(macro);
         }
     }
@@ -99,22 +147,19 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
 
 
     private void changeActionType(ButtonBase button, int mouseButton) {
-
         parent.refreshEntries();
     }
 
 
-    private void openConfigure(ButtonBase button, int mouseButton) {
-        Macro macro = ModuleWrapper.getMacro(entry);
-        if (mouseButton == 0 && macro != null) {
+    private void openConfigure(int mouseButton, Macro macro) {
+        if (mouseButton == 0) {
             macro.configure = !macro.configure;
             parent.refreshEntries();
         }
     }
 
-    private void removeMacro(ButtonBase button, int mouseButton) {
-        Macro macro = ModuleWrapper.getMacro(entry);
-        if (mouseButton == 0 && macro != null) {
+    private void removeMacro(int mouseButton, Macro macro) {
+        if (mouseButton == 0) {
             if (macro.getModule() != null) macro.getModule().remove(macro);
             parent.refreshEntries();
         }

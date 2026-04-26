@@ -5,6 +5,9 @@ import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.ConfigButtonKeybind;
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.gui.widgets.WidgetHoverInfo;
+import fi.dy.masa.malilib.gui.widgets.WidgetLabel;
+import fi.dy.masa.malilib.render.GuiContext;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.smok.macrofactory.Configs;
 import net.smok.macrofactory.gui.*;
@@ -12,6 +15,7 @@ import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.Module;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>> {
 
@@ -22,13 +26,21 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        reCreateListWidget();
+        Objects.requireNonNull(getListWidget()).refreshEntries();
+    }
+
+    @Override
     public void initGui() {
         super.initGui();
         this.clearOptions();
 
 
+        int right = getBrowserX() + getBrowserWidth();
         IGuiIcon folderIcon = MacroIcons.FOLDER_ADD;
-        int folderX = 10 + getBrowserWidth() - folderIcon.getWidth();
+        int folderX = right - folderIcon.getWidth();
         int folderY = 25;
         ButtonGeneric buttonAdd = addButton(new ButtonGeneric(folderX, folderY, folderIcon), (_, mouseButton) -> {
             if (mouseButton == 0) {
@@ -40,14 +52,16 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
 
         int keybindWidth = 100;
         int keybindHeight = 20;
-        int keybindX = 10 + getBrowserWidth() - keybindWidth;
+        int keybindX = right - keybindWidth;
         int keybindY = 3;
+
+        addWidget(new WidgetLabel(keybindX - 100, keybindY, 100, keybindHeight, 0xffffffff, StringUtils.translate(Configs.Generic.CMD_MACRO_OPEN.getTranslatedName())));
 
         addWidget(new ConfigButtonKeybind(keybindX, keybindY, keybindWidth, keybindHeight,
                 Configs.Generic.CMD_MACRO_OPEN.getKeybind(), this));
         addWidget(new WidgetHoverInfo(keybindX, keybindY, keybindWidth, keybindHeight, Configs.Generic.CMD_MACRO_OPEN.getComment()));
 
-        addWidget(new ButtonGenericWithoutScroll(getBrowserWidth() / 2 - 100, getBrowserHeight() + 40, 200, false, "gui.done")
+        addWidget(new ButtonGenericWithoutScroll(width / 2 - 100, getListY() + getBrowserHeight() + 20, 200, false, "gui.done")
                 .setActionListener((_, mouseButton) -> {
                     if (mouseButton == 0) closeGui(true);
                 }));
@@ -57,7 +71,7 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
     @Override
     protected GuiList<ModuleWrapper, GuiEntry<ModuleWrapper>> createListWidget(int listX, int listY) {
         ModulesGui gui = this;
-        return new GuiList<>(listX, listY, getBrowserWidth(), getBrowserHeight(), false, 22, getBrowserWidth() - 23) {
+        return new GuiList<>(width / 2 - getBrowserWidth() / 2, listY, getBrowserWidth(), getBrowserHeight(), false, 22, getBrowserWidth() - 23) {
             @Override
             public Collection<ModuleWrapper> getAllEntries() {
                 ImmutableList.Builder<ModuleWrapper> builder = ImmutableList.builder();
@@ -87,5 +101,8 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
         };
     }
 
-
+    @Override
+    protected void drawTitle(GuiContext ctx, int mouseX, int mouseY, float partialTicks) {
+        this.drawString(ctx, this.getTitleString(), getBrowserX(), TOP, COLOR_WHITE);
+    }
 }

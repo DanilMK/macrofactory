@@ -53,11 +53,16 @@ public abstract class GuiScreen<T, W extends GuiEntry<T>> extends GuiListBase<T,
         //this.renderDarkening(context);
     }
 
+
+    protected int getBrowserX() {
+        return width / 2 - getBrowserWidth() / 2;
+    }
+
     // Copy code because I can't extend GuiConfigBase.class
     @Override
     protected int getBrowserWidth()
     {
-        return this.width - 20;
+        return Math.min(this.width - 20, 600);
     }
 
     @Override
