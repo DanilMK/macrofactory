@@ -72,7 +72,7 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
                     if (mouseButton == 0) closeGui(true);
                 }));
 
-        deleteButton = addWidget(new ButtonGenericWithoutScroll(width / 2 + 5, getListY() + getBrowserHeight() + 20, 200, false, "undo deleting")
+        deleteButton = addWidget(new ButtonGenericWithoutScroll(width / 2 + 5, getListY() + getBrowserHeight() + 20, 200, false, "gui.button.undo_delete")
                 .setActionListener((_, mouseButton) -> {
                     if (mouseButton == 0) {
                         deleteStack.pop().undo();
