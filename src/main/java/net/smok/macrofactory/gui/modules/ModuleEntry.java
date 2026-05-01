@@ -6,7 +6,6 @@ import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.ConfigButtonKeybind;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
 import net.smok.macrofactory.Configs;
-import net.smok.macrofactory.DoneAction;
 import net.smok.macrofactory.gui.*;
 import net.smok.macrofactory.gui.utils.ListEntryBox;
 import net.smok.macrofactory.macros.DeleteAction;
