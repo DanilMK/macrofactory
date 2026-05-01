@@ -12,7 +12,6 @@ import fi.dy.masa.malilib.util.KeyCodes;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
-import net.smok.macrofactory.gui.utils.ButtonKeybind;
 import net.smok.macrofactory.gui.utils.TextFieldListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -168,7 +167,7 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
     }
 
     protected ConfigButtonKeybind addKeybindButton(int x, int y, int width, int height, IHotkey hotkey) {
-        return addButton((ConfigButtonKeybind) new ButtonKeybind(x, y,
-                width, height, hotkey.getKeybind(), this.host, hotkey.getComment()), this.host.getButtonPressListener());
+        return addButton(new ConfigButtonKeybind(x, y,
+                width, height, hotkey.getKeybind(), this.host), this.host.getButtonPressListener());
     }
 }
