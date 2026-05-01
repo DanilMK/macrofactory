@@ -2,14 +2,17 @@ package net.smok.macrofactory.gui;
 
 import fi.dy.masa.malilib.config.IConfigValue;
 import fi.dy.masa.malilib.gui.GuiTextFieldGeneric;
+import fi.dy.masa.malilib.gui.button.ConfigButtonKeybind;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
 import fi.dy.masa.malilib.gui.widgets.*;
 import fi.dy.masa.malilib.gui.wrappers.TextFieldWrapper;
+import fi.dy.masa.malilib.hotkeys.IHotkey;
 import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.util.KeyCodes;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.smok.macrofactory.gui.utils.ButtonKeybind;
 import net.smok.macrofactory.gui.utils.TextFieldListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -164,4 +167,8 @@ public abstract class GuiEntry<T> extends WidgetConfigOptionBase<T> {
         super.render(drawContext, mouseX, mouseY, selected);
     }
 
+    protected ConfigButtonKeybind addKeybindButton(int x, int y, int width, int height, IHotkey hotkey) {
+        return addButton((ConfigButtonKeybind) new ButtonKeybind(x, y,
+                width, height, hotkey.getKeybind(), this.host, hotkey.getComment()), this.host.getButtonPressListener());
+    }
 }

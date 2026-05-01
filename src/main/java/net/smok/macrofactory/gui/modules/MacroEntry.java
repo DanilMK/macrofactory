@@ -44,8 +44,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
             ButtonGeneric configButton = addButton(new ButtonSwitch(rightX -= bSize, y, MacroIcons.SETTINGS, macro.configure), (_, mouseButton) -> openConfigure(mouseButton, macro));
             addCommentForWidget(configButton, BUTTON_MACRO_CONFIGURE);
 
-            ConfigButtonKeybind keybindButton = addButton(new ConfigButtonKeybind(center, y, rightX - center - space(),
-                    buttonHeight, macro.getHotkey().getKeybind(), this.host), this.host.getButtonPressListener());
+            ConfigButtonKeybind keybindButton = addKeybindButton(center, y, rightX - center - space(), buttonHeight, macro.getHotkey());
             addCommentForWidget(keybindButton, macro.getHotkey().getComment());
         }
 
@@ -97,7 +96,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
 
         changeButtonsByCallType(macro);
         addWidget(new ListEntryBox(getX() - 2, this.y - 1, 1, getHeight() + 1, true, false));
-        addWidget(new ListEntryBox(x - 2, this.y + height - 1, getWidth(), 1, false, true));
+        addWidget(new ListEntryBox(getX() - 2, this.y + height - 1, getWidth(), 1, false, true));
     }
 
 

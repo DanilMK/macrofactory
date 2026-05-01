@@ -55,20 +55,11 @@ public class ModuleEntry extends GuiEntry<ModuleWrapper> {
                 setHeight((lineHeight + space()) * 2);
                 int y1 = getY() + lineHeight + space();
 
-                IHotkey hotkey = module.getGuiKeybind();
-                ConfigButtonKeybind keybindButton = new ConfigButtonKeybind(getX(), y1,
-                        200, lineHeight - 1, hotkey.getKeybind(), this.host);
-
-                addButton(keybindButton, this.host.getButtonPressListener());
-                addCommentForWidget(keybindButton, hotkey.getComment());
+                ConfigButtonKeybind keybindButton = addKeybindButton(getX(), y1, 200, lineHeight - 1, module.getGuiKeybind());
+                addCommentForWidget(keybindButton, module.getGuiKeybind().getComment());
             } else {
-
-                IHotkey hotkey = module.getGuiKeybind();
-                ConfigButtonKeybind keybindButton = new ConfigButtonKeybind(rightX = getX() + getWidth() / 2, y,
-                        leftWidth, lineHeight - 2, hotkey.getKeybind(), this.host);
-
-                addButton(keybindButton, this.host.getButtonPressListener());
-                addCommentForWidget(keybindButton, hotkey.getComment());
+                ConfigButtonKeybind keybindButton = addKeybindButton(rightX = getX() + getWidth() / 2, y, leftWidth, lineHeight - 2, module.getGuiKeybind());
+                addCommentForWidget(keybindButton, module.getGuiKeybind().getComment());
             }
         }
 
