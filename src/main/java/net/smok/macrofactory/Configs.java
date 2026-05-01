@@ -141,6 +141,7 @@ public class Configs implements IConfigHandler, IKeybindProvider {
         Map<String, Integer> count = new HashMap<>();
 
         for (Module module : Macros.Modules) {
+            if (module.markAsDeleted) continue;
             int n = 0;
             String moduleName = module.getName().isEmpty() ? "Unnamed module" : module.getName();
             if (count.containsKey(moduleName)) n = count.get(moduleName);

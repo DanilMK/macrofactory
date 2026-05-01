@@ -30,5 +30,6 @@
   "config.value.call_type.repeat" : "Repeat",
   "config.value.call_type.hold" : "Hold",
   "config.comment.icon" : "Macro icon\nClick to set item from main hand on icon",
-  "gui.empty_module" : "Module is empty"
+  "gui.empty_module" : "Module is empty",
+  "gui.button.undo_delete": "Undo delete"
 }

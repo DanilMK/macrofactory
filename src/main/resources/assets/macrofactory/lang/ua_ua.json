@@ -30,5 +30,6 @@
   "config.value.call_type.repeat" : "Повторюваний",
   "config.value.call_type.hold" : "Утримуваний",
   "config.comment.icon" : "Macro icon\nClick to set item from main hand on icon",
-  "gui.empty_module" : "Module is empty"
+  "gui.empty_module" : "Модуль пустий",
+  "gui.button.undo_delete": "Скасувати видалення"
 }

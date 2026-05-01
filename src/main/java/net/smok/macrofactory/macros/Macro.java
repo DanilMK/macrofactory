@@ -31,6 +31,7 @@ public class Macro {
     private final CommandAction commandAction = new CommandAction("Action", "gui.button.chat" , "config.comment.command_action");
 
     public boolean configure;
+    public boolean markAsDeleted;
 
     private final Module module;
 
@@ -106,6 +107,10 @@ public class Macro {
     }
     public ItemIcon getIcon() {
         return icon;
+    }
+
+    public boolean isModified() {
+        return playerAction.isModified() || commandAction.getCommand().isModified();
     }
 
     @NotNull

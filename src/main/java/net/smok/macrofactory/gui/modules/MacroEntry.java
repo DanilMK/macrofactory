@@ -8,6 +8,7 @@ import net.smok.macrofactory.gui.*;
 import net.smok.macrofactory.gui.selector.ItemIconWidget;
 import net.smok.macrofactory.gui.utils.ListEntryBox;
 import net.smok.macrofactory.macros.CallType;
+import net.smok.macrofactory.macros.DeleteAction;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.actions.ActionType;
 import net.smok.macrofactory.macros.actions.CommandAction;
@@ -159,7 +160,11 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
 
     private void removeMacro(int mouseButton, Macro macro) {
         if (mouseButton == 0) {
-            if (macro.getModule() != null) macro.getModule().remove(macro);
+            if (macro.isModified()) {
+                macro.markAsDeleted = true;
+                ModulesGui.deleteStack.push(new DeleteAction(macro, null));
+            }
+            else if (macro.getModule() != null) macro.getModule().remove(macro);
             parent.refreshEntries();
         }
     }

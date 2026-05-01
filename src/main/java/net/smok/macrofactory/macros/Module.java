@@ -28,6 +28,7 @@ public class Module implements IKeybindProvider {
             "config.comment.module_hotkey", this::openGui);
     public boolean isOpen;
     public boolean configure;
+    public boolean markAsDeleted;
 
 
     public Module() {}
@@ -66,6 +67,9 @@ public class Module implements IKeybindProvider {
     public ConfigHotkey getGuiKeybind() {
         return guiKeybind;
     }
+    public boolean isModified() {
+        return !macros.isEmpty();
+    }
 
     @Override
     public void addKeysToMap(IKeybindManager manager) {
@@ -93,7 +97,7 @@ public class Module implements IKeybindProvider {
 
     public JsonObject getAsJsonElement() {
         JsonArray array = new JsonArray();
-        for (Macro macro : macros) array.add(macro.getAsJsonElement());
+        for (Macro macro : macros) if (!macro.markAsDeleted) array.add(macro.getAsJsonElement());
 
         JsonObject json = new JsonObject();
         json.add("Array", array);

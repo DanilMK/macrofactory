@@ -11,18 +11,24 @@ import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.smok.macrofactory.Configs;
 import net.smok.macrofactory.gui.*;
+import net.smok.macrofactory.macros.DeleteAction;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.Module;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Stack;
 
 public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>> {
 
 
+    public static final Stack<DeleteAction> deleteStack = new Stack<>();
+    private ButtonGeneric deleteButton;
+
     public ModulesGui(Screen parent) {
         super(10, 25, "gui.title.screen_module");
         setParent(parent);
+        deleteStack.clear();
     }
 
     @Override
@@ -61,10 +67,19 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
                 Configs.Generic.CMD_MACRO_OPEN.getKeybind(), this));
         addWidget(new WidgetHoverInfo(keybindX, keybindY, keybindWidth, keybindHeight, Configs.Generic.CMD_MACRO_OPEN.getComment()));
 
-        addWidget(new ButtonGenericWithoutScroll(width / 2 - 100, getListY() + getBrowserHeight() + 20, 200, false, "gui.done")
+        addWidget(new ButtonGenericWithoutScroll(width / 2 - 205, getListY() + getBrowserHeight() + 20, 200, false, "gui.done")
                 .setActionListener((_, mouseButton) -> {
                     if (mouseButton == 0) closeGui(true);
                 }));
+
+        deleteButton = addWidget(new ButtonGenericWithoutScroll(width / 2 + 5, getListY() + getBrowserHeight() + 20, 200, false, "undo deleting")
+                .setActionListener((_, mouseButton) -> {
+                    if (mouseButton == 0) {
+                        deleteStack.pop().undo();
+                        getListWidget().refreshEntries();
+                    }
+                }));
+        refreshDeleteButton();
 
     }
 
@@ -77,10 +92,11 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
                 ImmutableList.Builder<ModuleWrapper> builder = ImmutableList.builder();
 
                 for (Module module : Configs.Macros.Modules) {
+                    if (module.markAsDeleted) continue;
                     builder.add(new ModuleWrapper(module));
 
                     for (Macro macro : module.getAll())
-                        builder.add(new ModuleWrapper(macro));
+                        if (!macro.markAsDeleted) builder.add(new ModuleWrapper(macro));
                 }
                 return builder.build();
             }
@@ -98,11 +114,21 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
                 }
                 return null;
             }
+
+            @Override
+            public void refreshEntries() {
+                super.refreshEntries();
+                refreshDeleteButton();
+            }
         };
     }
 
     @Override
     protected void drawTitle(GuiContext ctx, int mouseX, int mouseY, float partialTicks) {
         this.drawString(ctx, this.getTitleString(), getBrowserX(), TOP, COLOR_WHITE);
+    }
+
+    public void refreshDeleteButton() {
+        if (deleteButton != null) deleteButton.setEnabled(!deleteStack.empty());
     }
 }

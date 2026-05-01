@@ -5,10 +5,11 @@ import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.ConfigButtonKeybind;
 import fi.dy.masa.malilib.gui.interfaces.IKeybindConfigGui;
-import fi.dy.masa.malilib.hotkeys.IHotkey;
 import net.smok.macrofactory.Configs;
+import net.smok.macrofactory.DoneAction;
 import net.smok.macrofactory.gui.*;
 import net.smok.macrofactory.gui.utils.ListEntryBox;
+import net.smok.macrofactory.macros.DeleteAction;
 import net.smok.macrofactory.macros.Macro;
 import net.smok.macrofactory.macros.Module;
 
@@ -84,9 +85,14 @@ public class ModuleEntry extends GuiEntry<ModuleWrapper> {
             parent.refreshEntries();
         }
     }
+
     private void removeThisCollection(int mouseButton, Module module) {
         if (mouseButton == 0) {
-            Configs.Macros.Modules.remove(module);
+            if (module.isModified()) {
+                module.markAsDeleted = true;
+                ModulesGui.deleteStack.push(new DeleteAction(null, module));
+            }
+            else Configs.Macros.Modules.remove(module);
             parent.refreshEntries();
         }
     }
