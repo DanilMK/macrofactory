@@ -60,18 +60,22 @@ public class CommandAction implements MacroAction {
     }
 
     @Override
-    public void run(@NotNull Minecraft client, Loop loop, Macro macro) {
+    public void start(@NotNull Minecraft client, Macro macro) {
         var player = client.player;
-        if (player == null || loop == Loop.OFF_TICK || loop == Loop.END) return;
+        if (player == null) return;
 
         if (inChat.getBooleanValue()) GuiBase.openGui(new ChatScreen(substringValue(), false));
         else sendMessageOrCommand(player, substringValue());
     }
 
+    @Override
+    public void end(@NotNull Minecraft minecraft, Macro macro) {}
+
     private String substringValue() {
         String value = command.getStringValue();
         return value.length() > 256 ? value.substring(0, 256) : value;
     }
+
     private void sendMessageOrCommand(LocalPlayer player, String message) {
         if (message.startsWith("/")) player.connection.sendCommand(message.substring(1));
         else player.connection.sendChat(message);

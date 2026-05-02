@@ -159,8 +159,6 @@ public class Macro {
         SmokUtils.setValueFromJsonElement(json, callType);
         SmokUtils.setValueFromJsonElement(json, icon);
 
-
-
         switch ((ActionType)actionType.getOptionListValue()) {
 
             case Player -> SmokUtils.setValueFromJsonElement(json, playerAction);
@@ -174,53 +172,73 @@ public class Macro {
 
     private boolean onKeyAction(KeyAction keyAction, IKeybind key) {
         Minecraft client = Minecraft.getInstance();
-        macroExecute(keyAction == KeyAction.PRESS, client);
-        return true;
-    }
-
-    public void macroExecute(boolean press, @NotNull Minecraft client) {
         switch ((CallType)callType.getOptionListValue()) {
 
             case SINGLE -> {
-                getAction().run(client, press ? MacroAction.Loop.TICK : MacroAction.Loop.END, this);
+                if (keyAction == KeyAction.PRESS) {
+                    startLoop(client, 10000);
+                    TickLoop.addToLoop(this);
+                } else TickLoop.removeFromLoop(this);
+                //getAction().run(client, press ? MacroAction.Loop.TICK : MacroAction.Loop.END, this);
             }
             case REPEAT -> {
-                if (!press) {
+                if (keyAction == KeyAction.RELEASE) {
                     if (enable) TickLoop.removeFromLoop(this);
                     else {
-                        startLoop(client);
+                        startLoop(client, 0);
                         TickLoop.addToLoop(this);
                     }
                 }
             }
             case HOLD -> {
-                if (press) {
-                    startLoop(client);
+                if (keyAction == KeyAction.PRESS) {
+                    startLoop(client, 10);
                     TickLoop.addToLoop(this);
-                } else TickLoop.removeFromLoop(this);
+                } else if (keyAction == KeyAction.RELEASE)
+                    TickLoop.removeFromLoop(this);
+            }
+        }
+        return true;
+    }
+
+
+    public void macroExecute(@NotNull Minecraft client) {
+        switch ((CallType)callType.getOptionListValue()) {
+
+            case SINGLE, HOLD -> {
+                TickLoop.addToLoop(this);
+                startLoop(client, 0);
+                TickLoop.removeFromLoop(this);
+            }
+            case REPEAT -> {
+                if (enable) TickLoop.removeFromLoop(this);
+                else {
+                    startLoop(client, 0);
+                    TickLoop.addToLoop(this);
+                }
             }
         }
     }
 
     public void tickLoop(Minecraft client) {
-        if (cd <= 0) {
+        if (--cd <= 0) {
             cd += delay.getIntegerValue();
-            getAction().run(client, MacroAction.Loop.TICK, this);
+            getAction().start(client, this);
 
         } else {
-            getAction().run(client, MacroAction.Loop.OFF_TICK, this);
+            getAction().end(client, this);
         }
-        if (cd > 0) cd--;
     }
 
-    public void startLoop(Minecraft client) {
+    public void startLoop(Minecraft client, int delay) {
         enable = true;
-        getAction().run(client, MacroAction.Loop.START, this);
+        getAction().start(client, this);
+        cd = delay;
     }
 
     public void endLoop(Minecraft client) {
         enable = false;
-        getAction().run(client, MacroAction.Loop.END, this);
+        getAction().end(client, this);
     }
 
     private MacroAction getAction() {

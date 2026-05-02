@@ -30,21 +30,20 @@ public final class PlayerAction extends ConfigOptionList implements MacroAction 
 
 
     @Override
-    public void run(@NotNull Minecraft client, Loop loop, Macro macro) {
-        if (loop != Loop.END && getKeyBinding().wasClicked()) {
+    public void start(@NotNull Minecraft client, Macro macro) {
+        if (getKeyBinding().clicked()) {
             TickLoop.removeFromLoop(macro);
             return;
         }
 
-        switch (loop) {
-            case TICK -> {
-                getKeyBinding().setPressed(client, true);
-                if (macro.getCd() > 3 && getKeyBinding() == PlayerKeybind.ATTACK) attack(client);
-            }
-            case END, OFF_TICK -> getKeyBinding().setPressed(client, false);
-        }
+        getKeyBinding().down(client);
+        if (macro.getCd() > 3 && getKeyBinding() == PlayerKeybind.ATTACK) attack(client);
     }
 
+    @Override
+    public void end(@NotNull Minecraft client, Macro macro) {
+        if (getKeyBinding().isDown()) getKeyBinding().up(client);
+    }
 
     public PlayerKeybind getKeyBinding() {
         return (PlayerKeybind) getOptionListValue();

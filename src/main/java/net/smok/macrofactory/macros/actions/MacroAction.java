@@ -7,11 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 public interface MacroAction {
 
-    enum Loop {
-        START, END, TICK, OFF_TICK
-    }
 
-    void run(@NotNull Minecraft client, Loop loop, Macro macro);
+    void start(@NotNull Minecraft minecraft, Macro macro);
+    void end(@NotNull Minecraft minecraft, Macro macro);
 
     JsonElement getAsJsonElement();
     void setValueFromJsonElement(JsonElement element);

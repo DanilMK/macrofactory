@@ -33,6 +33,6 @@ public class MacroWidget extends WidgetBase {
     }
 
     public void callMacro(@NotNull Minecraft client) {
-        macro.macroExecute(false, client);
+        macro.macroExecute(client);
     }
 }

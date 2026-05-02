@@ -29,23 +29,31 @@ public enum PlayerKeybind implements IConfigOptionListEntry {
 
     public static void click(KeyMapping keyMapping) {
         for (PlayerKeybind value : VALUES)
-            if (value.name.equals(keyMapping.getName()) && value.down) value.click = true;
+            if (value.name.equals(keyMapping.getName())) value.click = true;
     }
 
-
-    public void setPressed(Minecraft client, boolean pressed) {
-        if (!click || pressed) keyBindingGetter.apply(client).setDown(pressed);
-        down = pressed;
+    public void down(Minecraft client) {
+        keyBindingGetter.apply(client).setDown(true);
+        down = true;
         click = false;
     }
 
-    public boolean wasClicked() {
+    public void up(Minecraft client) {
+        keyBindingGetter.apply(client).setDown(false);
+        down = false;
+    }
+
+    public boolean clicked() {
         return click;
+    }
+
+    public boolean isDown() {
+        return down;
     }
 
     @Override
     public String getStringValue() {
-        return name;
+        return name();
     }
 
     @Override
