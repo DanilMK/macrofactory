@@ -30,7 +30,7 @@ public class MacroSelectionGui extends GuiBase {
     private MacroWidget selectedWidget;
     private int lastMouseX;
     private int lastMouseY;
-    private RectContainer rectContainer;
+    private int minY;
 
 
     public MacroSelectionGui(Module module) {
@@ -51,22 +51,18 @@ public class MacroSelectionGui extends GuiBase {
         if (macroList.size() / 5 < 5) maxLines = macroList.size() / 5 + 1;
 
         int maxWidth = maxColumns * columnWidth - containerSpace;
-        int minY = height / 2 - maxLines * columnWidth / 2;
+        minY = height / 2 - maxLines * columnWidth / 2;
         int minX = width / 2 - maxWidth / 2;
 
-
-        rectContainer = new RectContainer(containerSpace, containerSpace, minX, minX + maxWidth, minY, selectorSize);
 
         // Fill the rect container with widgets
         for (int line = 0, i = 0; line < maxLines; line++) {
             for (int column = 0; column < maxColumns && i < macroList.size(); column++, i++) {
                 Macro macro = macroList.get(i);
-                Rect rect = rectContainer.addRect(new PositionAlignment(true, selectorSize));
-                MacroWidget widget = new MacroWidget(rect.x(), rect.y(), rect.width(), rect.height(), macro);
+                MacroWidget widget = new MacroWidget(minX + column * columnWidth, minY + line * columnWidth, selectorSize, selectorSize, macro);
                 addWidget(widget);
                 macroWidgets.add(widget);
             }
-            if (line < maxLines - 1) rectContainer.addLine();
         }
 
     }
@@ -75,24 +71,24 @@ public class MacroSelectionGui extends GuiBase {
     public void extractRenderState(GuiGraphicsExtractor drawContext, int mouseX, int mouseY, float partialTicks) {
 
         String mainText = selectedWidget != null ? selectedWidget.getSelectName() : module.getName();
-        drawContext.centeredText(font, StringUtils.translate(mainText), width / 2, rectContainer.getMinY() - 20, -1);
+        drawContext.centeredText(font, StringUtils.translate(mainText), width / 2, minY - 20, -1);
         if (module.getAll().isEmpty())
         {
-            drawContext.centeredText(font, StringUtils.translate("gui.empty_module"), width / 2, rectContainer.getMinY(), -1);
+            drawContext.centeredText(font, StringUtils.translate("gui.empty_module"), width / 2, minY, -1);
             return;
         }
 
+
         boolean mouseIsMove = this.lastMouseX != mouseX || this.lastMouseY != mouseY;
-
-        if (!rectContainer.isMouseOver(mouseX, mouseY)) {
+        if (mouseIsMove) {
             selectedWidget = null;
-            mouseIsMove = false;
+
+            for (MacroWidget widget : macroWidgets) if (widget.isMouseOver(mouseX, mouseY)) selectedWidget = widget;
         }
 
-        for (MacroWidget widget : macroWidgets) {
+        for (MacroWidget widget : macroWidgets)
             widget.render(GuiContext.fromGuiGraphics(drawContext), mouseX, mouseY, widget == selectedWidget);
-            if (mouseIsMove && widget.isMouseOver(mouseX, mouseY)) selectedWidget = widget;
-        }
+
         lastMouseX = mouseX;
         lastMouseY = mouseY;
     }
