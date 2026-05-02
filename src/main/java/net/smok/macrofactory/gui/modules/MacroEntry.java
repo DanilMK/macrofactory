@@ -36,6 +36,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
         int buttonHeight = 20;
         int y = getY() + 1;
         int center = x + getWidth() / 2;
+        if (macro.configure) y += space();
 
         {
             int rightX = x + getWidth();
@@ -56,7 +57,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
             addCommentForWidget(iconButton, macro.getIcon().getComment());
             addWidget(new ItemIconWidget(iconButton.getX(), iconButton.getY(), iconButton.getWidth(), iconButton.getHeight(), macro.getIcon(), MacroIcons.MACRO_EMPTY_ICON));
 
-            addTextField(x, y, center - x - space(), lineHeight, macro.getNameConfig(), macro.getNameConfig().getComment(), 30, true);
+            addTextField(x, y + 1, center - x - space(), buttonHeight, macro.getNameConfig(), macro.getNameConfig().getComment(), 30, true);
 
             x = getX();
             y += lineHeight;
@@ -71,14 +72,14 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
             x = getX();
             y += lineHeight;
 
-            delayText = addTextField(x, y, center - x - space(), buttonHeight, macro.getDelayConfig(), macro.getDelayConfig().getComment(), 4, false);
-            ConfigButtonOptionList optionButton1 = new ConfigButtonOptionList(center, y, btnWidth, lineHeight, macro.getCallType());
+            delayText = addTextField(x, y + 1, center - x - space(), buttonHeight, macro.getDelayConfig(), macro.getDelayConfig().getComment(), 4, false);
+            ConfigButtonOptionList optionButton1 = new ConfigButtonOptionList(center, y, btnWidth, buttonHeight, macro.getCallType());
 
             addButton(optionButton1, (_, mouseButton) -> changeCallType(mouseButton, macro));
             addCommentForWidget(optionButton1, macro.getCallType().getComment());
 
 
-            setHeight(lineHeight * 3 + space());
+            setHeight(lineHeight * 3 + space() * 3);
 
         } else {
             if (macro.getIcon().isModified()) {
@@ -115,7 +116,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
                     x += bSize;
                     inChatButton = chatButton;
                 }
-                addTextField(x, y, rightX - x - space(), lineHeight, config.getCommand(), config.getCommand().getComment(), 256, true);
+                addTextField(x, y + 1, rightX - x - space(), buttonHeight, config.getCommand(), config.getCommand().getComment(), 256, true);
             }
             case Player -> {
                 ConfigButtonOptionList optionButton = new ConfigButtonOptionList(x, y, rightX - x - space(), buttonHeight, macro.getPlayerAction());
