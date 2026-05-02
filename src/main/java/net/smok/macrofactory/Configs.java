@@ -45,7 +45,7 @@ public class Configs implements IConfigHandler, IKeybindProvider {
 
     public static class Generic {
 
-        public static final ConfigHotkey CMD_MACRO_OPEN = new HotKeyWithCallBack("cmdMacroOpen", "Y", "Menu Open", (_, _) -> {
+        public static final ConfigHotkey CMD_MACRO_OPEN = new HotKeyWithCallBack("modules_open", "Y", "config.comment.modules_open", (_, _) -> {
             GuiBase.openGui(new ModulesGui(null));
             return true;
         });

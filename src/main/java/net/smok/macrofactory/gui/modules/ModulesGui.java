@@ -61,7 +61,7 @@ public class ModulesGui extends GuiScreen<ModuleWrapper, GuiEntry<ModuleWrapper>
         int keybindX = right - keybindWidth;
         int keybindY = 3;
 
-        addWidget(new WidgetLabel(keybindX - 100, keybindY, 100, keybindHeight, 0xffffffff, StringUtils.translate(Configs.Generic.CMD_MACRO_OPEN.getTranslatedName())));
+        addWidget(new WidgetLabel(keybindX - 100, keybindY, 100, keybindHeight, 0xffffffff, Configs.Generic.CMD_MACRO_OPEN.getTranslatedName()));
 
         addWidget(new ConfigButtonKeybind(keybindX, keybindY, keybindWidth, keybindHeight,
                 Configs.Generic.CMD_MACRO_OPEN.getKeybind(), this));

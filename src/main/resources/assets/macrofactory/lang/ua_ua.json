@@ -31,5 +31,7 @@
   "config.value.call_type.hold" : "Утримуваний",
   "config.comment.icon" : "Macro icon\nClick to set item from main hand on icon",
   "gui.empty_module" : "Модуль пустий",
-  "gui.button.undo_delete": "Скасувати видалення"
+  "gui.button.undo_delete": "Скасувати видалення",
+  "config.comment.modules_open": "Клавіша для відкриття цього меню",
+  "config.value.modules_open": "Відкрити меню"
 }

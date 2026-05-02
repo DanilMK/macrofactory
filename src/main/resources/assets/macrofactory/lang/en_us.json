@@ -31,5 +31,7 @@
   "config.value.call_type.hold" : "Hold",
   "config.comment.icon" : "Macro icon\nClick to set item from main hand on icon",
   "gui.empty_module" : "Module is empty",
-  "gui.button.undo_delete": "Undo delete"
+  "gui.button.undo_delete": "Undo delete",
+  "config.comment.modules_open": "Keybind for open this menu",
+  "config.value.modules_open": "Open Menu"
 }

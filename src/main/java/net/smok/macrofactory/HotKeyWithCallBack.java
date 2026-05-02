@@ -7,11 +7,13 @@ import fi.dy.masa.malilib.hotkeys.KeybindSettings;
 public class HotKeyWithCallBack extends ConfigHotkey {
     public HotKeyWithCallBack(String name, String defaultStorageString, String comment, IHotkeyCallback callBack) {
         super(name, defaultStorageString, comment);
+        translatedName = "config.value." + name;
         getKeybind().setCallback(callBack);
     }
 
     public HotKeyWithCallBack(String name, String defaultStorageString, KeybindSettings settings, String comment, IHotkeyCallback callback) {
         super(name, defaultStorageString, settings, comment);
+        translatedName = "config.value." + name;
         getKeybind().setCallback(callback);
     }
 }
