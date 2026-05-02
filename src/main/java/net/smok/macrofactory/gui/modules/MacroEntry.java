@@ -63,7 +63,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
             y += lineHeight;
             int btnWidth = getWidth() / 2 - space();
 
-            addAction(macro, x, y, center, lineHeight, buttonHeight);
+            addAction(macro, x, y, center, buttonHeight);
             ConfigButtonOptionList optionButton = new ConfigButtonOptionList(center, y, btnWidth, buttonHeight, macro.getActionType());
 
             addButton(optionButton, this::changeActionType);
@@ -93,7 +93,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
                 x += labelWidth + space();
             }
 
-            addAction(macro, x, y, center, lineHeight, buttonHeight);
+            addAction(macro, x, y, center, buttonHeight);
         }
 
         changeButtonsByCallType(macro);
@@ -103,7 +103,7 @@ public class MacroEntry extends GuiEntry<ModuleWrapper> {
 
 
 
-    private void addAction(Macro macro, int x, int y, int rightX, int lineHeight, int buttonHeight) {
+    private void addAction(Macro macro, int x, int y, int rightX, int buttonHeight) {
         ActionType actionType = (ActionType) macro.getActionType().getOptionListValue();
 
         switch (actionType) {
